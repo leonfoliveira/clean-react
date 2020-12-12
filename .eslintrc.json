@@ -1,12 +1,5 @@
 {
-  "extends": [
-    "airbnb-typescript",
-    "prettier",
-    "prettier/import",
-    "prettier/jsx-a11y",
-    "prettier/react",
-    "prettier/react-hooks"
-  ],
+  "extends": ["airbnb-typescript", "prettier"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
