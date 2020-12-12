@@ -5,6 +5,9 @@
   "repository": "https://github.com/leonfoliveira/clean-react.git",
   "author": "Leonardo Oliveira <leonfoliveira@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^26.0.19",
