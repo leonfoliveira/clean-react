@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { useFormContext } from '@/presentation/contexts/form/form-context';
+import { useLoginContext } from '@/presentation/pages/login/login-context';
 
 import Styles from './input-styles.scss';
 
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 const Input: React.FC<Props> = (props) => {
-  const { state, setState } = useFormContext();
+  const { state, setState } = useLoginContext();
   const error = state[`${props.name}Error`];
 
   const enableInput = (event: React.FocusEvent<HTMLInputElement>) => {

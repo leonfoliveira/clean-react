@@ -13,12 +13,12 @@ type ContextProps = {
   setState: React.Dispatch<React.SetStateAction<ContextProps['state']>>;
 };
 
-const FormContext = createContext<ContextProps>(null);
+const LoginContext = createContext<ContextProps>(null);
 
 type Props = {
   validation: Validation;
 };
-export const FormContextProvider: React.FC<Props> = ({ children, validation }) => {
+export const LoginContextProvider: React.FC<Props> = ({ children, validation }) => {
   const [state, setState] = useState<ContextProps['state']>({
     isLoading: false,
     email: '',
@@ -36,7 +36,7 @@ export const FormContextProvider: React.FC<Props> = ({ children, validation }) =
     });
   }, [state.email, state.password]);
 
-  return <FormContext.Provider value={{ state, setState }}>{children}</FormContext.Provider>;
+  return <LoginContext.Provider value={{ state, setState }}>{children}</LoginContext.Provider>;
 };
 
-export const useFormContext = () => useContext(FormContext);
+export const useLoginContext = () => useContext(LoginContext);
