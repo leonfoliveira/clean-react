@@ -56,12 +56,23 @@ describe('Login Component', () => {
 
     fireEvent.input(passwordInput, { target: { value: faker.internet.password() } });
 
-    expect(validationStub.fieldName).toEqual('password');
     expect(passwordStatus.title).toBe(validationStub.errorMessage);
     expect(passwordStatus.textContent).toBe('🔴');
   });
 
-  test('Should show password state if Validator succeeds', () => {
+  test('Should show valid email state if Validator succeeds', () => {
+    const { sut, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    const emailInput = sut.getByTestId('email');
+    const emailStatus = sut.getByTestId('email-status');
+
+    fireEvent.input(emailInput, { target: { value: faker.internet.email() } });
+
+    expect(emailStatus.title).toBe('Tudo Certo!');
+    expect(emailStatus.textContent).toBe('🟢');
+  });
+
+  test('Should show valid password state if Validator succeeds', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     const passwordInput = sut.getByTestId('password');
@@ -69,7 +80,6 @@ describe('Login Component', () => {
 
     fireEvent.input(passwordInput, { target: { value: faker.internet.password() } });
 
-    expect(validationStub.fieldName).toEqual('password');
     expect(passwordStatus.title).toBe('Tudo Certo!');
     expect(passwordStatus.textContent).toBe('🟢');
   });
