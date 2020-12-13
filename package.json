@@ -19,6 +19,7 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^11.2.2",
     "@types/axios": "^0.14.0",
     "@types/faker": "^5.1.5",
     "@types/jest": "^26.0.19",
