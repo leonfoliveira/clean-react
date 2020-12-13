@@ -18,9 +18,9 @@ const Input: React.FC<Props> = (props) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
-  const getStatus = (): string => '🔴';
+  const getStatus = (): string => (error ? '🔴' : '🟢');
 
-  const getTitle = (): string => error;
+  const getTitle = (): string => error || 'Tudo Certo!';
 
   return (
     <div className={Styles.inputWrap}>
