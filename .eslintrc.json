@@ -16,6 +16,7 @@
     "import/no-extraneous-dependencies": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
-    "react/destructuring-assignment": "off"
+    "react/destructuring-assignment": "off",
+    "@typescript-eslint/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }]
   }
 }

@@ -29,11 +29,11 @@ export const FormContextProvider: React.FC<Props> = ({ children, validation }) =
   });
 
   useEffect(() => {
-    validation.validate({ email: state.email });
+    validation.validate('email', state.email);
   }, [state.email]);
 
   useEffect(() => {
-    validation.validate({ password: state.password });
+    validation.validate('password', state.password);
   }, [state.password]);
 
   return <FormContext.Provider value={{ state, setState }}>{children}</FormContext.Provider>;
