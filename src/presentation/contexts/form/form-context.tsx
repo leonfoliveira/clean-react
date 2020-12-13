@@ -1,30 +1,38 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, createContext, useContext, useEffect } from 'react';
+import { Validation } from '@/presentation/protocols/validation';
 
-type StateProps = {
+type ContextProps = {
   state: {
     isLoading: boolean;
+    email: '';
+    emailError: string;
+    password: '';
+    passwordError: string;
+    mainError: string;
   };
-  errorState: {
-    email: string;
-    password: string;
-    main: string;
-  };
+  setState: React.Dispatch<React.SetStateAction<ContextProps['state']>>;
 };
 
-const FormContext = createContext<StateProps>(null);
+const FormContext = createContext<ContextProps>(null);
 
-export const FormContextProvider: React.FC = ({ children }) => {
-  const [state] = useState<StateProps['state']>({
+type Props = {
+  validation: Validation;
+};
+export const FormContextProvider: React.FC<Props> = ({ children, validation }) => {
+  const [state, setState] = useState<ContextProps['state']>({
     isLoading: false,
+    email: '',
+    emailError: 'Campo obrigatório',
+    password: '',
+    passwordError: 'Campo obrigatório',
+    mainError: '',
   });
 
-  const [errorState] = useState<StateProps['errorState']>({
-    email: 'Campo obrigatório',
-    password: 'Campo obrigatório',
-    main: '',
-  });
+  useEffect(() => {
+    validation.validate({ email: state.email });
+  }, [state.email]);
 
-  return <FormContext.Provider value={{ state, errorState }}>{children}</FormContext.Provider>;
+  return <FormContext.Provider value={{ state, setState }}>{children}</FormContext.Provider>;
 };
 
 export const useFormContext = () => useContext(FormContext);

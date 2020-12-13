@@ -1,4 +1,5 @@
 import React from 'react';
+import { Validation } from '@/presentation/protocols/validation';
 
 import { FormContextProvider } from '@/presentation/contexts/form/form-context';
 
@@ -6,10 +7,14 @@ import { LoginHeader, Input, FormStatus, Footer } from '@/presentation/component
 
 import Styles from './login-styles.scss';
 
-const Login: React.FC = () => (
+type Props = {
+  validation: Validation;
+};
+const Login: React.FC<Props> = ({ validation }) => (
   <div className={Styles.login}>
     <LoginHeader />
-    <FormContextProvider>
+
+    <FormContextProvider validation={validation}>
       <form className={Styles.form} action="">
         <h2>Login</h2>
 
@@ -23,8 +28,9 @@ const Login: React.FC = () => (
         <span className={Styles.link}>Criar conta</span>
         <FormStatus />
       </form>
-      <Footer />
     </FormContextProvider>
+
+    <Footer />
   </div>
 );
 
