@@ -1,5 +1,11 @@
 {
-  "extends": ["airbnb-typescript", "prettier"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "extends": ["airbnb-typescript", "plugin:react/recommended", "prettier"],
+  "plugins": ["react"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
@@ -7,6 +13,8 @@
     "class-methods-use-this": "off",
     "max-classes-per-file": "off",
     "import/prefer-default-export": "off",
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
   }
 }
