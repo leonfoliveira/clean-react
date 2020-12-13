@@ -29,7 +29,10 @@ export const FormContextProvider: React.FC<Props> = ({ children, validation }) =
   });
 
   useEffect(() => {
-    validation.validate('email', state.email);
+    setState({
+      ...state,
+      emailError: validation.validate('email', state.email),
+    });
   }, [state.email]);
 
   useEffect(() => {
