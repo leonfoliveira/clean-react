@@ -22,9 +22,9 @@ export const FormContextProvider: React.FC<Props> = ({ children, validation }) =
   const [state, setState] = useState<ContextProps['state']>({
     isLoading: false,
     email: '',
-    emailError: 'Campo obrigatório',
+    emailError: '',
     password: '',
-    passwordError: 'Campo obrigatório',
+    passwordError: '',
     mainError: '',
   });
 
@@ -32,12 +32,9 @@ export const FormContextProvider: React.FC<Props> = ({ children, validation }) =
     setState({
       ...state,
       emailError: validation.validate('email', state.email),
+      passwordError: validation.validate('password', state.password),
     });
-  }, [state.email]);
-
-  useEffect(() => {
-    validation.validate('password', state.password);
-  }, [state.password]);
+  }, [state.email, state.password]);
 
   return <FormContext.Provider value={{ state, setState }}>{children}</FormContext.Provider>;
 };
