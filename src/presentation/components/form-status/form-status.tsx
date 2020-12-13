@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { useLoginContext } from '@/presentation/pages/login/login-context';
+import Context from '@/presentation/contexts/login-form-context';
 
 import Spinner from '@/presentation/components/spinner/spinner';
 
@@ -9,7 +9,7 @@ import Styles from './form-status-styles.scss';
 const FormStatus: React.FC = () => {
   const {
     state: { isLoading, mainError },
-  } = useLoginContext();
+  } = useContext(Context);
 
   return (
     <div className={Styles.errorWrap} data-testid="error-wrap">
