@@ -1,5 +1,6 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { createMemoryHistory } from 'history';
 import faker from 'faker';
 import 'jest-localstorage-mock';
