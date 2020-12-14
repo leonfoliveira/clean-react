@@ -54,7 +54,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new DefinePlugin({
-      'process.env.API_URL': 'https://fordevs.herokuapp.com/api',
+      'process.env.API_URL': JSON.stringify('https://fordevs.herokuapp.com/api'),
     }),
   ],
 };
