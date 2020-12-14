@@ -8,7 +8,7 @@ import { render, RenderResult, cleanup, fireEvent, waitFor } from '@testing-libr
 import { AuthenticationSpy, ValidationStub } from '@/presentation/mocks';
 import { InvalidCredentialsError } from '@/domain/errors';
 
-import Login from './login';
+import { Login } from '@/presentation/pages';
 
 type SutTypes = {
   sut: RenderResult;
