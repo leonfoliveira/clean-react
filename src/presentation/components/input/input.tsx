@@ -24,7 +24,13 @@ const Input: React.FC<Props> = (props) => {
 
   return (
     <div className={Styles.inputWrap}>
-      <input {...props} readOnly onFocus={enableInput} onChange={handleChange} data-testid={props.name} />
+      <input
+        {...props}
+        readOnly
+        onFocus={enableInput}
+        onChange={handleChange}
+        data-testid={props.name}
+      />
       <span
         className={Styles.status}
         role="img"
