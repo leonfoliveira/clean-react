@@ -43,7 +43,7 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessTokenMoc
 
       setState({ ...state, isLoading: true });
       const account = await authentication.auth({ email: state.email, password: state.password });
-      saveAccessTokenMock.save(account.accessToken);
+      await saveAccessTokenMock.save(account.accessToken);
       history.replace('/');
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message });
