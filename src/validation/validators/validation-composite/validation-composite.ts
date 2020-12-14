@@ -10,7 +10,7 @@ export class ValidationComposite implements Validation {
 
     const error = validators.reduce((curr, v) => {
       const test = v.validate(fieldValue);
-      return test ? test.message : curr;
+      return !curr && test ? test.message : curr;
     }, '');
 
     return error;
