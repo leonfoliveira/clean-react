@@ -12,8 +12,11 @@ export class ValidationComposite implements Validation {
     const validators = this.validators.filter((v) => v.field === fieldName);
 
     const error = validators.reduce((curr, v) => {
+      if (curr) {
+        return curr;
+      }
       const test = v.validate(fieldValue);
-      return !curr && test ? test.message : curr;
+      return test ? test.message : curr;
     }, '');
 
     return error;
