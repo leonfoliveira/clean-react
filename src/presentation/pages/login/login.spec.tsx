@@ -2,8 +2,7 @@ import React from 'react';
 import { render, RenderResult, cleanup, fireEvent } from '@testing-library/react';
 import faker from 'faker';
 
-import { AuthenticationSpy } from '@/presentation/mocks/mock-authentication';
-import { ValidationStub } from '@/presentation/mocks';
+import { AuthenticationSpy, ValidationStub } from '@/presentation/mocks';
 
 import Login from './login';
 
