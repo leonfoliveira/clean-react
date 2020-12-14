@@ -1,10 +1,11 @@
 import React from 'react';
-import { render, RenderResult } from '@testing-library/react';
+import faker from 'faker';
+import { fireEvent, render, RenderResult } from '@testing-library/react';
 import Context from '@/presentation/contexts/login-form-context';
 
 import Input from './input';
 
-const makeSut = (): RenderResult =>
+const makeSut = (fieldName: string): RenderResult =>
   render(
     <Context.Provider
       value={{
@@ -19,24 +20,27 @@ const makeSut = (): RenderResult =>
         setState: () => {},
       }}
     >
-      <Input name="field" />
+      <Input name={fieldName} />
     </Context.Provider>,
   );
 
 describe('Input Component', () => {
   test('Should begin with read only', () => {
-    const { getByTestId } = makeSut();
+    const field = faker.database.column();
+    const { getByTestId } = makeSut(field);
 
-    const input = getByTestId('field') as HTMLInputElement;
+    const input = getByTestId(field) as HTMLInputElement;
 
     expect(input.readOnly).toBe(true);
   });
 
-  test('Should begin with read only', () => {
-    const { getByTestId } = makeSut();
+  test('Should remove readOnly on focus', () => {
+    const field = faker.database.column();
+    const { getByTestId } = makeSut(field);
 
-    const input = getByTestId('field') as HTMLInputElement;
+    const input = getByTestId(field) as HTMLInputElement;
+    fireEvent.focus(input);
 
-    expect(input.readOnly).toBe(true);
+    expect(input.readOnly).toBe(false);
   });
 });
