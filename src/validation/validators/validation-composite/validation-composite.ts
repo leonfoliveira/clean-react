@@ -4,7 +4,6 @@ import { FieldValidation } from '@/validation/protocols/field-validation';
 export class ValidationComposite implements Validation {
   constructor(private readonly validators: FieldValidation[]) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validate(fieldName: string, fieldValue: string): string {
     const validators = this.validators.filter((v) => v.field === fieldName);
 
