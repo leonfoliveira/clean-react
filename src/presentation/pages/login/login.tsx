@@ -12,9 +12,9 @@ import Styles from './login-styles.scss';
 type Props = {
   validation: Validation;
   authentication: Authentication;
-  saveAccessTokenMock: SaveAccessToken;
+  saveAccessToken: SaveAccessToken;
 };
-const Login: React.FC<Props> = ({ validation, authentication, saveAccessTokenMock }) => {
+const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }) => {
   const history = useHistory();
   const [state, setState] = useState({
     isLoading: false,
@@ -43,7 +43,7 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessTokenMoc
 
       setState({ ...state, isLoading: true });
       const account = await authentication.auth({ email: state.email, password: state.password });
-      await saveAccessTokenMock.save(account.accessToken);
+      await saveAccessToken.save(account.accessToken);
       history.replace('/');
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message });
