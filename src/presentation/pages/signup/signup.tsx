@@ -4,13 +4,15 @@ import Context from '@/presentation/contexts/form-context';
 
 import { Validation } from '@/presentation/protocols/validation';
 import { LoginHeader, Input, FormStatus, Footer } from '@/presentation/components';
+import { Registration } from '@/domain/usecases';
 
 import Styles from './signup-styles.scss';
 
 type Props = {
   validation: Validation;
+  registration: Registration;
 };
-const Signup: React.FC<Props> = ({ validation }) => {
+const Signup: React.FC<Props> = ({ validation, registration }) => {
   const [state, setState] = useState({
     isLoading: false,
     name: '',
@@ -41,6 +43,12 @@ const Signup: React.FC<Props> = ({ validation }) => {
     event.preventDefault();
 
     setState({ ...state, isLoading: true });
+    await registration.register({
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      passwordConfirmation: state.passwordConfirmation,
+    });
   };
 
   return (
