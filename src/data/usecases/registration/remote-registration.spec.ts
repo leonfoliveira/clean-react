@@ -5,7 +5,7 @@ import { AccountModel } from '@/domain/models';
 import { RegistrationParams } from '@/domain/usecases/registration';
 import { mockAccountModel, mockRegistration } from '@/domain/mocks';
 import { HttpStatusCode } from '@/data/protocols/http';
-import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors';
+import { EmailInUseError, UnexpectedError } from '@/domain/errors';
 
 import { RemoteRegistration } from './remote-registration';
 
@@ -72,7 +72,7 @@ describe('Registration', () => {
 
     const promise = sut.register(mockRegistration());
 
-    expect(promise).rejects.toThrow(new InvalidCredentialsError());
+    expect(promise).rejects.toThrow(new EmailInUseError());
   });
 
   test('Should throw UnexpectedError if HttpPostClient returns 404', async () => {
