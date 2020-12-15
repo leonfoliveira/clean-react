@@ -15,7 +15,7 @@
     "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": [
       "error",
-      { "devDependencies": ["**/mock-*", "**/*.test.*", "**/*.spec.*"] }
+      { "devDependencies": ["**/mocks/**", "**/*.test.*", "**/*.spec.*"] }
     ],
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
