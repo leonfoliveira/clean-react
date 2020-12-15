@@ -1,8 +1,11 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { createMemoryHistory } from 'history';
 import faker from 'faker';
 import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react';
 
-import { Helper, ValidationStub, RegistrationSpy } from '@/presentation/mocks';
+import { Helper, ValidationStub, RegistrationSpy, SaveAccessTokenMock } from '@/presentation/mocks';
 import { EmailInUseError } from '@/domain/errors';
 
 import Signup from './signup';
@@ -10,19 +13,30 @@ import Signup from './signup';
 type SutTypes = {
   sut: RenderResult;
   registrationSpy: RegistrationSpy;
+  saveAccessTokenMock: SaveAccessTokenMock;
 };
 
 type SutParams = {
   validationError: string;
 };
 
+const history = createMemoryHistory({ initialEntries: ['/signup'] });
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub();
   validationStub.errorMessage = params?.validationError;
   const registrationSpy = new RegistrationSpy();
-  const sut = render(<Signup validation={validationStub} registration={registrationSpy} />);
+  const saveAccessTokenMock = new SaveAccessTokenMock();
+  const sut = render(
+    <Router history={history}>
+      <Signup
+        validation={validationStub}
+        registration={registrationSpy}
+        saveAccessToken={saveAccessTokenMock}
+      />
+    </Router>,
+  );
 
-  return { sut, registrationSpy };
+  return { sut, registrationSpy, saveAccessTokenMock };
 };
 
 const simulateValidSubmit = async (
@@ -189,5 +203,15 @@ describe('Login Component', () => {
 
     Helper.testElementText(sut, 'main-error', error.message);
     Helper.testChildCount(sut, 'error-wrap', 1);
+  });
+
+  test('Should call SaveAccessToken on success', async () => {
+    const { sut, registrationSpy, saveAccessTokenMock } = makeSut();
+
+    await simulateValidSubmit(sut);
+
+    expect(saveAccessTokenMock.accessToken).toBe(registrationSpy.account.accessToken);
+    expect(history.length).toBe(1);
+    expect(history.location.pathname).toBe('/');
   });
 });

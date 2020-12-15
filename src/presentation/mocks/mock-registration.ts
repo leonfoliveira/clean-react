@@ -1,7 +1,9 @@
 import { Registration, RegistrationParams } from '@/domain/usecases';
 import { AccountModel } from '@/domain/models';
+import { mockAccountModel } from '@/domain/mocks';
 
 export class RegistrationSpy implements Registration {
+  account = mockAccountModel();
   params: RegistrationParams;
   callsCount = 0;
 
@@ -9,6 +11,6 @@ export class RegistrationSpy implements Registration {
     this.params = params;
     this.callsCount += 1;
 
-    return Promise.resolve(null);
+    return Promise.resolve(this.account);
   }
 }
