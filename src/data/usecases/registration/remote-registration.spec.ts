@@ -3,7 +3,8 @@ import faker from 'faker';
 import { HttpPostClientSpy } from '@/data/mocks';
 import { AccountModel } from '@/domain/models';
 import { RegistrationParams } from '@/domain/usecases/registration';
-import { mockRegistration } from '@/domain/mocks';
+import { mockAccountModel, mockRegistration } from '@/domain/mocks';
+import { HttpStatusCode } from '@/data/protocols/http';
 
 import { RemoteRegistration } from './remote-registration';
 
@@ -36,5 +37,18 @@ describe('Registration', () => {
     sut.register(body);
 
     expect(httpPostClientSpy.body).toEqual(body);
+  });
+
+  test('Should return an AccountModel if HttpPostClient returns 200', async () => {
+    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
+    const httpResponse = mockAccountModel();
+    httpPostClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResponse,
+    };
+
+    const account = await sut.register(mockRegistration());
+
+    expect(account).toEqual(httpResponse);
   });
 });
