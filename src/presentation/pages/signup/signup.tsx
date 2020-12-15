@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Context from '@/presentation/contexts/form-context';
 
 import { Validation } from '@/presentation/protocols/validation';
 import { LoginHeader, Input, FormStatus, Footer } from '@/presentation/components';
-import { Registration } from '@/domain/usecases';
+import { Registration, SaveAccessToken } from '@/domain/usecases';
 
 import Styles from './signup-styles.scss';
 
 type Props = {
   validation: Validation;
   registration: Registration;
+  saveAccessToken: SaveAccessToken;
 };
-const Signup: React.FC<Props> = ({ validation, registration }) => {
+const Signup: React.FC<Props> = ({ validation, registration, saveAccessToken }) => {
+  const history = useHistory();
   const [state, setState] = useState({
     isLoading: false,
     name: '',
@@ -54,12 +57,14 @@ const Signup: React.FC<Props> = ({ validation, registration }) => {
       }
 
       setState({ ...state, isLoading: true });
-      await registration.register({
+      const account = await registration.register({
         name: state.name,
         email: state.email,
         password: state.password,
         passwordConfirmation: state.passwordConfirmation,
       });
+      await saveAccessToken.save(account.accessToken);
+      history.replace('/');
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message });
     }
