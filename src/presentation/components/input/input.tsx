@@ -10,36 +10,35 @@ const Input: React.FC<Props> = (props) => {
   const { state, setState } = useContext(Context);
   const error = state[`${props.name}Error`];
 
-  const enableInput = (event: React.FocusEvent<HTMLInputElement>) => {
-    // eslint-disable-next-line no-param-reassign
-    event.target.readOnly = false;
-  };
-
   const handleChange = (event: React.FocusEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
-  const getStatus = (): string => (error ? '🔴' : '🟢');
-
-  const getTitle = (): string => error || 'Tudo Certo!';
-
   return (
     <div className={Styles.inputWrap}>
-      <input
-        {...props}
-        readOnly
-        onFocus={enableInput}
-        onChange={handleChange}
-        data-testid={props.name}
-      />
+      <label htmlFor={props.id || props.name}>
+        <input
+          id={props.name}
+          {...props}
+          placeholder=" "
+          readOnly
+          onFocus={(event) => {
+            // eslint-disable-next-line no-param-reassign
+            event.target.readOnly = false;
+          }}
+          onChange={handleChange}
+          data-testid={props.name}
+        />
+        <span>{props.placeholder}</span>
+      </label>
       <span
         className={Styles.status}
         role="img"
         aria-label="invalid"
-        title={getTitle()}
+        title={error || 'Tudo Certo!'}
         data-testid={`${props.name}-status`}
       >
-        {getStatus()}
+        {error ? '🔴' : '🟢'}
       </span>
     </div>
   );
