@@ -4,7 +4,7 @@ export type RegistrationParams = {
   name: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  passwordConfirmation: string;
 };
 
 export interface Registration {

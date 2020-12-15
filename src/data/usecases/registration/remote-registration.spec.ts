@@ -13,7 +13,7 @@ describe('Registration', () => {
       name: '',
       email: '',
       password: '',
-      confirmPassword: '',
+      passwordConfirmation: '',
     });
 
     expect(httpPostClientSpy.url).toBe('any_url');
