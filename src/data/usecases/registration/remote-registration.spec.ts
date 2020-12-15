@@ -5,6 +5,7 @@ import { AccountModel } from '@/domain/models';
 import { RegistrationParams } from '@/domain/usecases/registration';
 import { mockAccountModel, mockRegistration } from '@/domain/mocks';
 import { HttpStatusCode } from '@/data/protocols/http';
+import { UnexpectedError } from '@/domain/errors';
 
 import { RemoteRegistration } from './remote-registration';
 
@@ -50,5 +51,16 @@ describe('Registration', () => {
     const account = await sut.register(mockRegistration());
 
     expect(account).toEqual(httpResponse);
+  });
+
+  test('Should throw UnexpectedError if HttpPostClient returns 400', async () => {
+    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
+    httpPostClientSpy.response = {
+      statusCode: HttpStatusCode.badRequest,
+    };
+
+    const promise = sut.register(mockRegistration());
+
+    expect(promise).rejects.toThrow(new UnexpectedError());
   });
 });
