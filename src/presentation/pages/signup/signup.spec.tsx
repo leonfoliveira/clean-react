@@ -80,4 +80,12 @@ describe('Login Component', () => {
 
     Helper.testStatusForField(sut, 'name');
   });
+
+  test('Should show valid email state if Validator succeeds', () => {
+    const { sut } = makeSut();
+
+    Helper.populateField(sut, 'email');
+
+    Helper.testStatusForField(sut, 'email');
+  });
 });
