@@ -28,4 +28,13 @@ describe('Registration', () => {
 
     expect(httpPostClientSpy.url).toBe(url);
   });
+
+  test('Should call HttpPostClient with correct body', () => {
+    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
+    const body = mockRegistration();
+
+    sut.register(body);
+
+    expect(httpPostClientSpy.body).toEqual(body);
+  });
 });
