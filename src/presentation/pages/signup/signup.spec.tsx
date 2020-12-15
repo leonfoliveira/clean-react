@@ -2,12 +2,13 @@ import React from 'react';
 import faker from 'faker';
 import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react';
 
-import { Helper, ValidationStub } from '@/presentation/mocks';
+import { Helper, ValidationStub, RegistrationSpy } from '@/presentation/mocks';
 
 import Signup from './signup';
 
 type SutTypes = {
   sut: RenderResult;
+  registrationSpy: RegistrationSpy;
 };
 
 type SutParams = {
@@ -17,9 +18,10 @@ type SutParams = {
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub();
   validationStub.errorMessage = params?.validationError;
-  const sut = render(<Signup validation={validationStub} />);
+  const registrationSpy = new RegistrationSpy();
+  const sut = render(<Signup validation={validationStub} registration={registrationSpy} />);
 
-  return { sut };
+  return { sut, registrationSpy };
 };
 
 const simulateValidSubmit = async (
@@ -138,5 +140,33 @@ describe('Login Component', () => {
     await simulateValidSubmit(sut);
 
     Helper.testElementExists(sut, 'spinner');
+  });
+
+  test('Should call Registration with correct values', async () => {
+    const { sut, registrationSpy } = makeSut();
+    const name = faker.name.findName();
+    const email = faker.internet.email();
+    const password = faker.internet.password();
+
+    await simulateValidSubmit(sut, name, email, password);
+
+    expect(registrationSpy.params).toEqual({
+      name,
+      email,
+      password,
+      passwordConfirmation: password,
+    });
+  });
+
+  test('Should call Registration only once', async () => {
+    const { sut, registrationSpy } = makeSut();
+    const name = faker.name.findName();
+    const email = faker.internet.email();
+    const password = faker.internet.password();
+
+    await simulateValidSubmit(sut, name, email, password);
+    await simulateValidSubmit(sut, name, email, password);
+
+    expect(registrationSpy.callsCount).toBe(1);
   });
 });
