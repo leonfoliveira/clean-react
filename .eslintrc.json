@@ -4,8 +4,16 @@
       "version": "detect"
     }
   },
-  "extends": ["airbnb-typescript", "plugin:react/recommended", "prettier"],
-  "plugins": ["react"],
+  "extends": [
+    "airbnb-typescript",
+    "plugin:react/recommended",
+    "plugin:cypress/recommended",
+    "prettier"
+  ],
+  "env": {
+    "cypress/globals": true
+  },
+  "plugins": ["react", "cypress"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },

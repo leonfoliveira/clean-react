@@ -8,3 +8,5 @@ public
 /*
 !/src
 *.scss
+*.js
+*.json
