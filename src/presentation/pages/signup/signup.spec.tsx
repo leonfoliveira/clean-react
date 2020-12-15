@@ -3,6 +3,7 @@ import faker from 'faker';
 import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react';
 
 import { Helper, ValidationStub, RegistrationSpy } from '@/presentation/mocks';
+import { EmailInUseError } from '@/domain/errors';
 
 import Signup from './signup';
 
@@ -177,5 +178,16 @@ describe('Login Component', () => {
     await simulateValidSubmit(sut);
 
     expect(registrationSpy.callsCount).toBe(0);
+  });
+
+  test('Should present error if Authentication fails', async () => {
+    const { sut, registrationSpy } = makeSut();
+    const error = new EmailInUseError();
+
+    jest.spyOn(registrationSpy, 'register').mockRejectedValueOnce(error);
+    await simulateValidSubmit(sut);
+
+    Helper.testElementText(sut, 'main-error', error.message);
+    Helper.testChildCount(sut, 'error-wrap', 1);
   });
 });
