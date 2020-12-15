@@ -8,14 +8,14 @@ export class ValidationComposite implements Validation {
     return new ValidationComposite(validators);
   }
 
-  validate(fieldName: string, fieldValue: string): string {
+  validate(fieldName: string, input: object): string {
     const validators = this.validators.filter((v) => v.field === fieldName);
 
     const error = validators.reduce((curr, v) => {
       if (curr) {
         return curr;
       }
-      const test = v.validate(fieldValue);
+      const test = v.validate(input);
       return test ? test.message : curr;
     }, '');
 
