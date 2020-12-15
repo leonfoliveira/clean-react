@@ -1,6 +1,6 @@
 {
   "name": "clean-react",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "main": "src/main/index.tsx",
   "repository": "https://github.com/leonfoliveira/clean-react.git",
   "author": "Leonardo Oliveira <leonfoliveira@gmail.com>",
