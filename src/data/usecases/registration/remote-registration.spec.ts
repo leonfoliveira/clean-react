@@ -3,6 +3,7 @@ import faker from 'faker';
 import { HttpPostClientSpy } from '@/data/mocks';
 import { AccountModel } from '@/domain/models';
 import { RegistrationParams } from '@/domain/usecases/registration';
+import { mockRegistration } from '@/domain/mocks';
 
 import { RemoteRegistration } from './remote-registration';
 
@@ -23,12 +24,7 @@ describe('Registration', () => {
     const url = faker.internet.url();
     const { sut, httpPostClientSpy } = makeSut(url);
 
-    sut.register({
-      name: '',
-      email: '',
-      password: '',
-      passwordConfirmation: '',
-    });
+    sut.register(mockRegistration());
 
     expect(httpPostClientSpy.url).toBe(url);
   });
