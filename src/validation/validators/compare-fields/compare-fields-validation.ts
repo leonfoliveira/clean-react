@@ -5,6 +5,6 @@ export class CompareFieldsValidation implements FieldValidation {
   constructor(readonly field: string, private readonly valueToCompare: string) {}
 
   validate(value: string): Error {
-    return value ? new InvalidFieldError() : new InvalidFieldError();
+    return value === this.valueToCompare ? null : new InvalidFieldError();
   }
 }
