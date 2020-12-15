@@ -1,4 +1,4 @@
-const wp = require('@cypress/webpack-preprocessor');
+const wp = require('cypress-webpack-preprocessor-v5');
 
 module.exports = wp({
   webpackOptions: {
