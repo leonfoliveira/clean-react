@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 
-import Context from '@/presentation/contexts/login-form-context';
+import Context from '@/presentation/contexts/form-context';
 
 import Styles from './input-styles.scss';
 
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+
 const Input: React.FC<Props> = (props) => {
   const { state, setState } = useContext(Context);
   const error = state[`${props.name}Error`];

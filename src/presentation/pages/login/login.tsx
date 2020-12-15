@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { Validation } from '@/presentation/protocols/validation';
 import { Authentication, SaveAccessToken } from '@/domain/usecases';
 
-import Context from '@/presentation/contexts/login-form-context';
+import Context from '@/presentation/contexts/form-context';
 
 import { LoginHeader, Input, FormStatus, Footer } from '@/presentation/components';
 
