@@ -5,7 +5,7 @@ import { Authentication, SaveAccessToken } from '@/domain/usecases';
 
 import Context from '@/presentation/contexts/form-context';
 
-import { LoginHeader, Input, FormStatus, Footer } from '@/presentation/components';
+import { LoginHeader, Input, FormStatus, Footer, SubmitButton } from '@/presentation/components';
 
 import Styles from './login-styles.scss';
 
@@ -18,6 +18,7 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken })
   const history = useHistory();
   const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     email: '',
     emailError: '',
     password: '',
@@ -26,10 +27,13 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken })
   });
 
   useEffect(() => {
+    const emailError = validation.validate('email', state.email);
+    const passwordError = validation.validate('password', state.password);
     setState({
       ...state,
-      emailError: validation.validate('email', state.email),
-      passwordError: validation.validate('password', state.password),
+      emailError,
+      passwordError,
+      isFormInvalid: !!emailError || !!passwordError,
     });
   }, [state.email, state.password]);
 
@@ -37,7 +41,7 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken })
     event.preventDefault();
 
     try {
-      if (state.isLoading || state.emailError || state.passwordError) {
+      if (state.isLoading || state.isFormInvalid) {
         return;
       }
 
@@ -61,14 +65,7 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken })
           <Input type="email" name="email" placeholder="Digite seu email" />
           <Input type="password" name="password" placeholder="Digite sua senha" />
 
-          <button
-            className={Styles.submit}
-            type="submit"
-            disabled={!!state.emailError || !!state.passwordError}
-            data-testid="submit"
-          >
-            Entrar
-          </button>
+          <SubmitButton text="Entrar" />
 
           <Link className={Styles.link} to="/signup" replace data-testid="signup-link">
             Criar conta
