@@ -1,26 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Context from '@/presentation/contexts/form-context';
 
+import { Validation } from '@/presentation/protocols/validation';
 import { LoginHeader, Input, FormStatus, Footer } from '@/presentation/components';
 
 import Styles from './signup-styles.scss';
 
-const Signup: React.FC = () => {
-  const [state] = useState({
+type Props = {
+  validation: Validation;
+};
+const Signup: React.FC<Props> = ({ validation }) => {
+  const [state, setState] = useState({
     isLoading: false,
-    nameError: 'Campo Obrigatório',
+    name: '',
+    nameError: '',
     emailError: 'Campo Obrigatório',
     passwordError: 'Campo Obrigatório',
     passwordConfirmationError: 'Campo Obrigatório',
     mainError: '',
   });
 
+  useEffect(() => {
+    setState({
+      ...state,
+      nameError: validation.validate('name', state.name),
+    });
+  }, [state.name]);
+
   return (
     <div className={Styles.signup}>
       <LoginHeader />
 
-      <Context.Provider value={{ state }}>
+      <Context.Provider value={{ state, setState }}>
         <form className={Styles.form}>
           <h2>Criar Conta</h2>
 
