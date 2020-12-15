@@ -5,7 +5,7 @@ import { AccountModel } from '@/domain/models';
 import { RegistrationParams } from '@/domain/usecases/registration';
 import { mockAccountModel, mockRegistration } from '@/domain/mocks';
 import { HttpStatusCode } from '@/data/protocols/http';
-import { UnexpectedError } from '@/domain/errors';
+import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors';
 
 import { RemoteRegistration } from './remote-registration';
 
@@ -62,5 +62,16 @@ describe('Registration', () => {
     const promise = sut.register(mockRegistration());
 
     expect(promise).rejects.toThrow(new UnexpectedError());
+  });
+
+  test('Should throw InvalidCredentials if HttpPostClient returns 403', async () => {
+    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
+    httpPostClientSpy.response = {
+      statusCode: HttpStatusCode.forbidden,
+    };
+
+    const promise = sut.register(mockRegistration());
+
+    expect(promise).rejects.toThrow(new InvalidCredentialsError());
   });
 });
