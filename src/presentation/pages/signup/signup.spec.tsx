@@ -169,4 +169,13 @@ describe('Login Component', () => {
 
     expect(registrationSpy.callsCount).toBe(1);
   });
+
+  test('Should not call Registration if form is invalid', async () => {
+    const validationError = faker.random.words();
+    const { sut, registrationSpy } = makeSut({ validationError });
+
+    await simulateValidSubmit(sut);
+
+    expect(registrationSpy.callsCount).toBe(0);
+  });
 });
