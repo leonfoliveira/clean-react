@@ -15,7 +15,7 @@
   },
   "plugins": ["react", "cypress"],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.lint.json"
   },
   "rules": {
     "class-methods-use-this": "off",
