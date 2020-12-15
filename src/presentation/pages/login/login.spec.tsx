@@ -11,7 +11,7 @@ import {
   ValidationStub,
   SaveAccessTokenMock,
   Helper,
-} from '@/presentation/mocks';
+} from '@/presentation/test';
 import { InvalidCredentialsError } from '@/domain/errors';
 
 import Login from './login';

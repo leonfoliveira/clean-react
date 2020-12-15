@@ -1,9 +1,9 @@
 import faker from 'faker';
 
-import { HttpPostClientSpy } from '@/data/mocks';
+import { HttpPostClientSpy } from '@/data/test';
 import { AccountModel } from '@/domain/models';
 import { RegistrationParams } from '@/domain/usecases/registration';
-import { mockAccountModel, mockRegistration } from '@/domain/mocks';
+import { mockAccountModel, mockRegistration } from '@/domain/test';
 import { HttpStatusCode } from '@/data/protocols/http';
 import { EmailInUseError, UnexpectedError } from '@/domain/errors';
 

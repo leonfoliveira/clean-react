@@ -5,7 +5,7 @@ import { createMemoryHistory } from 'history';
 import faker from 'faker';
 import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react';
 
-import { Helper, ValidationStub, RegistrationSpy, SaveAccessTokenMock } from '@/presentation/mocks';
+import { Helper, ValidationStub, RegistrationSpy, SaveAccessTokenMock } from '@/presentation/test';
 import { EmailInUseError } from '@/domain/errors';
 
 import Signup from './signup';

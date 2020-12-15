@@ -1,6 +1,6 @@
 import { Registration, RegistrationParams } from '@/domain/usecases';
 import { AccountModel } from '@/domain/models';
-import { mockAccountModel } from '@/domain/mocks';
+import { mockAccountModel } from '@/domain/test';
 
 export class RegistrationSpy implements Registration {
   account = mockAccountModel();

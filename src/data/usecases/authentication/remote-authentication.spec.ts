@@ -1,10 +1,10 @@
 import faker from 'faker';
 
-import { HttpPostClientSpy } from '@/data/mocks';
+import { HttpPostClientSpy } from '@/data/test';
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors';
 import { HttpStatusCode } from '@/data/protocols/http';
 
-import { mockAccountModel, mockAuthentication } from '@/domain/mocks';
+import { mockAccountModel, mockAuthentication } from '@/domain/test';
 import { AuthenticationParams } from '@/domain/usecases';
 import { AccountModel } from '@/domain/models';
 
