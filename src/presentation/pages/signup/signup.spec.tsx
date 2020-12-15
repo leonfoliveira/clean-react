@@ -38,8 +38,6 @@ const simulateValidSubmit = async (
   await waitFor(() => form);
 };
 
-
-
 describe('Login Component', () => {
   afterEach(cleanup);
 
@@ -139,6 +137,6 @@ describe('Login Component', () => {
 
     await simulateValidSubmit(sut);
 
-    testElementExists(sut, 'spinner');
+    Helper.testElementExists(sut, 'spinner');
   });
 });

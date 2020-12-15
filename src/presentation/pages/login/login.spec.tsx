@@ -58,11 +58,6 @@ const simulateValidSubmit = async (
   await waitFor(() => form);
 };
 
-const testElementExists = (sut: RenderResult, fieldName: string) => {
-  const el = sut.getByTestId(fieldName);
-  expect(el).toBeTruthy();
-};
-
 const testElementText = (sut: RenderResult, fieldName: string, text: string) => {
   const el = sut.getByTestId(fieldName);
   expect(el.textContent).toBe(text);
@@ -72,7 +67,7 @@ describe('Login Component', () => {
   afterEach(cleanup);
 
   test('Should start with initial state', () => {
-    const validationError = faker.random.words(); 
+    const validationError = faker.random.words();
     const { sut } = makeSut({ validationError });
 
     Helper.testChildCount(sut, 'error-wrap', 0);
@@ -129,7 +124,7 @@ describe('Login Component', () => {
 
     await simulateValidSubmit(sut);
 
-    testElementExists(sut, 'spinner');
+    Helper.testElementExists(sut, 'spinner');
   });
 
   test('Should call Authentication with correct values', async () => {

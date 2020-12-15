@@ -29,3 +29,8 @@ export const testStatusForField = (
   expect(fieldStatus.title).toBe(validationError || 'Tudo Certo!');
   expect(fieldStatus.textContent).toBe(validationError ? '🔴' : '🟢');
 };
+
+export const testElementExists = (sut: RenderResult, fieldName: string) => {
+  const el = sut.getByTestId(fieldName);
+  expect(el).toBeTruthy();
+};
