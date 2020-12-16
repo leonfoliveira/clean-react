@@ -58,6 +58,18 @@ describe('Login', () => {
     cy.url().should('equal', `${baseUrl}/login`);
   });
 
+  it('Should present UnexpectedError on any other error', () => {
+    cy.intercept(/login/, (req) => {
+      req.reply({ statusCode: faker.random.arrayElement([400, 404, 500]) });
+    });
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
+    cy.getByTestId('submit').click();
+    cy.getByTestId('spinner').should('not.exist');
+    cy.getByTestId('main-error').should('contain.text', 'Something wrong happened. Try again.');
+    cy.url().should('equal', `${baseUrl}/login`);
+  });
+
   it('Should present save accessToken if valid credentials are provided', () => {
     const accessToken = faker.random.uuid();
     cy.intercept(/login/, (req) => {
