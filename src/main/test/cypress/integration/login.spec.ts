@@ -98,7 +98,7 @@ describe('Login', () => {
     let count = 0;
     cy.intercept(/login/, (req) => {
       count += 1;
-      req.reply({ statusCode: 200, body: { accessToken: faker.random.uuid() } });
+      req.reply({});
     });
     cy.getByTestId('email').focus().type(faker.internet.email());
     cy.getByTestId('password').focus().type(faker.internet.password(5));
@@ -107,17 +107,16 @@ describe('Login', () => {
       .then(() => assert.deepEqual(count, 1));
   });
 
-  it('Should submit when enter is pressed', () => {
+  it('Should not submit if form is invalid', () => {
     let count = 0;
     cy.intercept(/login/, (req) => {
       count += 1;
-      req.reply({ statusCode: faker.random.arrayElement([200, 400, 401, 404, 500]) });
+      req.reply({});
     });
-    cy.getByTestId('email').focus().type(faker.internet.email());
-    cy.getByTestId('password')
+    cy.getByTestId('email')
       .focus()
-      .type(faker.internet.password(5))
+      .type(faker.internet.email())
       .type('{enter}')
-      .then(() => assert.deepEqual(count, 1));
+      .then(() => assert.deepEqual(count, 0));
   });
 });
