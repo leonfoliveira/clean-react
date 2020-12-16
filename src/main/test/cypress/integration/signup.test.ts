@@ -3,6 +3,23 @@ import faker from 'faker';
 import * as FormHelper from '../support/form-helper';
 import { Interceptor } from '../support/interceptor';
 
+const populateFields = (): void => {
+  cy.getByTestId('name').focus().type(faker.random.words());
+  FormHelper.testInputStatus('name');
+  cy.getByTestId('email').focus().type(faker.internet.email());
+  FormHelper.testInputStatus('email');
+  const password = faker.internet.password(5);
+  cy.getByTestId('password').focus().type(password);
+  FormHelper.testInputStatus('password');
+  cy.getByTestId('passwordConfirmation').focus().type(password);
+  FormHelper.testInputStatus('passwordConfirmation');
+};
+
+const simulateValidSubmit = (): void => {
+  populateFields();
+  cy.getByTestId('submit').click();
+};
+
 describe('Signup', () => {
   beforeEach(() => {
     cy.visit('signup');
@@ -35,15 +52,7 @@ describe('Signup', () => {
   });
 
   it('Should present valid state if form is valid', () => {
-    cy.getByTestId('name').focus().type(faker.random.words());
-    FormHelper.testInputStatus('name');
-    cy.getByTestId('email').focus().type(faker.internet.email());
-    FormHelper.testInputStatus('email');
-    const password = faker.internet.password(5);
-    cy.getByTestId('password').focus().type(password);
-    FormHelper.testInputStatus('password');
-    cy.getByTestId('passwordConfirmation').focus().type(password);
-    FormHelper.testInputStatus('passwordConfirmation');
+    populateFields();
 
     cy.getByTestId('submit').should('not.have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
@@ -51,42 +60,24 @@ describe('Signup', () => {
 
   it('Should present error if email is already in use', () => {
     Interceptor.mockForbidden(/signup/);
+    simulateValidSubmit();
 
-    cy.getByTestId('name').focus().type(faker.random.words());
-    cy.getByTestId('email').focus().type(faker.internet.email());
-    const password = faker.internet.password(5);
-    cy.getByTestId('password').focus().type(password);
-    cy.getByTestId('passwordConfirmation').focus().type(password);
-
-    cy.getByTestId('submit').click();
     FormHelper.testMainError('This email is already in use');
     FormHelper.testUrl('/signup');
   });
 
   it('Should present UnexpectedError on any other error', () => {
     Interceptor.mockCustomErrors('POST', /signup/, [400, 404, 500]);
+    simulateValidSubmit();
 
-    cy.getByTestId('name').focus().type(faker.random.words());
-    cy.getByTestId('email').focus().type(faker.internet.email());
-    const password = faker.internet.password(5);
-    cy.getByTestId('password').focus().type(password);
-    cy.getByTestId('passwordConfirmation').focus().type(password);
-
-    cy.getByTestId('submit').click();
     FormHelper.testMainError('Something wrong happened. Try again.');
     FormHelper.testUrl('/signup');
   });
 
   it('Should present UnexpectedError if invalid data is returned', () => {
     Interceptor.mockOk('POST', /signup/, { invalidProperty: faker.random.uuid() });
+    simulateValidSubmit();
 
-    cy.getByTestId('name').focus().type(faker.random.words());
-    cy.getByTestId('email').focus().type(faker.internet.email());
-    const password = faker.internet.password(5);
-    cy.getByTestId('password').focus().type(password);
-    cy.getByTestId('passwordConfirmation').focus().type(password);
-
-    cy.getByTestId('submit').click();
     FormHelper.testMainError('Something wrong happened. Try again.');
     FormHelper.testUrl('/signup');
   });
@@ -94,14 +85,8 @@ describe('Signup', () => {
   it('Should present save accessToken if valid credentials are provided', () => {
     const accessToken = faker.random.uuid();
     Interceptor.mockOk('POST', /signup/, { accessToken });
+    simulateValidSubmit();
 
-    cy.getByTestId('name').focus().type(faker.random.words());
-    cy.getByTestId('email').focus().type(faker.internet.email());
-    const password = faker.internet.password(5);
-    cy.getByTestId('password').focus().type(password);
-    cy.getByTestId('passwordConfirmation').focus().type(password);
-
-    cy.getByTestId('submit').click();
     cy.getByTestId('main-error').should('not.exist');
     cy.getByTestId('spinner').should('not.exist');
     FormHelper.testUrl('/');
@@ -112,12 +97,7 @@ describe('Signup', () => {
 
   it('Should prevent multiple submits', () => {
     const mockOk = Interceptor.mockOk('POST', /signup/, { accessToken: faker.random.uuid() });
-
-    cy.getByTestId('name').focus().type(faker.random.words());
-    cy.getByTestId('email').focus().type(faker.internet.email());
-    const password = faker.internet.password(5);
-    cy.getByTestId('password').focus().type(password);
-    cy.getByTestId('passwordConfirmation').focus().type(password);
+    populateFields();
 
     cy.getByTestId('submit')
       .dblclick()
