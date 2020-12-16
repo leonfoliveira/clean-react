@@ -76,4 +76,18 @@ describe('Signup', () => {
     FormHelper.testMainError('Something wrong happened. Try again.');
     FormHelper.testUrl('/signup');
   });
+
+  it('Should present UnexpectedError if invalid data is returned', () => {
+    Interceptor.mockOk('POST', /signup/, { invalidProperty: faker.random.uuid() });
+
+    cy.getByTestId('name').focus().type(faker.random.words());
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    const password = faker.internet.password(5);
+    cy.getByTestId('password').focus().type(password);
+    cy.getByTestId('passwordConfirmation').focus().type(password);
+
+    cy.getByTestId('submit').click();
+    FormHelper.testMainError('Something wrong happened. Try again.');
+    FormHelper.testUrl('/signup');
+  });
 });
