@@ -29,7 +29,7 @@ describe('RemoteLoadSurveyList', () => {
     expect(httpGetClientSpy.url).toBe(url);
   });
 
-  test('Should throw UnexpectedError if HttpPostClient returns 403', async () => {
+  test('Should throw UnexpectedError if HttpGetClient returns 403', async () => {
     const { sut, httpGetClientSpy } = makeSut(faker.internet.url());
     httpGetClientSpy.response = {
       statusCode: HttpStatusCode.forbidden,
@@ -40,7 +40,7 @@ describe('RemoteLoadSurveyList', () => {
     expect(promise).rejects.toThrow(new UnexpectedError());
   });
 
-  test('Should throw UnexpectedError if HttpPostClient returns 404', async () => {
+  test('Should throw UnexpectedError if HttpGetClient returns 404', async () => {
     const { sut, httpGetClientSpy } = makeSut(faker.internet.url());
     httpGetClientSpy.response = {
       statusCode: HttpStatusCode.notFound,
@@ -51,7 +51,7 @@ describe('RemoteLoadSurveyList', () => {
     expect(promise).rejects.toThrow(new UnexpectedError());
   });
 
-  test('Should throw UnexpectedError if HttpPostClient returns 500', async () => {
+  test('Should throw UnexpectedError if HttpGetClient returns 500', async () => {
     const { sut, httpGetClientSpy } = makeSut(faker.internet.url());
     httpGetClientSpy.response = {
       statusCode: HttpStatusCode.serverError,
