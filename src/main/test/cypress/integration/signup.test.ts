@@ -62,4 +62,18 @@ describe('Signup', () => {
     FormHelper.testMainError('This email is already in use');
     FormHelper.testUrl('/signup');
   });
+
+  it('Should present UnexpectedError on any other error', () => {
+    Interceptor.mockUnexpectedError('POST', /signup/);
+
+    cy.getByTestId('name').focus().type(faker.random.words());
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    const password = faker.internet.password(5);
+    cy.getByTestId('password').focus().type(password);
+    cy.getByTestId('passwordConfirmation').focus().type(password);
+
+    cy.getByTestId('submit').click();
+    FormHelper.testMainError('Something wrong happened. Try again.');
+    FormHelper.testUrl('/signup');
+  });
 });
