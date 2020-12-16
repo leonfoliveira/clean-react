@@ -25,7 +25,7 @@ describe('Login', () => {
     cy.getByTestId('email-status')
       .should('have.attr', 'title', 'Valor inválido')
       .should('contain.text', '🔴');
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(3));
+    cy.getByTestId('password').focus().type(faker.internet.password(3));
     cy.getByTestId('password-status')
       .should('have.attr', 'title', 'Valor inválido')
       .should('contain.text', '🔴');
@@ -38,7 +38,7 @@ describe('Login', () => {
     cy.getByTestId('email-status')
       .should('have.attr', 'title', 'Tudo Certo!')
       .should('contain.text', '🟢');
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
+    cy.getByTestId('password').focus().type(faker.internet.password(5));
     cy.getByTestId('password-status')
       .should('have.attr', 'title', 'Tudo Certo!')
       .should('contain.text', '🟢');
@@ -51,7 +51,7 @@ describe('Login', () => {
       req.reply({ statusCode: 401 });
     });
     cy.getByTestId('email').focus().type(faker.internet.email());
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
+    cy.getByTestId('password').focus().type(faker.internet.password(5));
     cy.getByTestId('submit').click();
     cy.getByTestId('spinner').should('not.exist');
     cy.getByTestId('main-error').should('contain.text', 'Invalid Credentials');
@@ -63,7 +63,7 @@ describe('Login', () => {
       req.reply({ statusCode: faker.random.arrayElement([400, 404, 500]) });
     });
     cy.getByTestId('email').focus().type(faker.internet.email());
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
+    cy.getByTestId('password').focus().type(faker.internet.password(5));
     cy.getByTestId('submit').click();
     cy.getByTestId('spinner').should('not.exist');
     cy.getByTestId('main-error').should('contain.text', 'Something wrong happened. Try again.');
@@ -75,7 +75,7 @@ describe('Login', () => {
       req.reply({ statusCode: 200, body: { invalidProperty: faker.random.uuid() } });
     });
     cy.getByTestId('email').focus().type(faker.internet.email());
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
+    cy.getByTestId('password').focus().type(faker.internet.password(5));
     cy.getByTestId('submit').click();
     cy.getByTestId('spinner').should('not.exist');
     cy.getByTestId('main-error').should('contain.text', 'Something wrong happened. Try again.');
@@ -88,7 +88,7 @@ describe('Login', () => {
       req.reply({ statusCode: 200, body: { accessToken } });
     });
     cy.getByTestId('email').focus().type(faker.internet.email());
-    cy.getByTestId('password').focus().type(faker.internet.password());
+    cy.getByTestId('password').focus().type(faker.internet.password(5));
     cy.getByTestId('submit').click();
     cy.getByTestId('main-error').should('not.exist');
     cy.getByTestId('spinner').should('not.exist');
