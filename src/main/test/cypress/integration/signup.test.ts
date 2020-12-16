@@ -109,4 +109,18 @@ describe('Signup', () => {
       assert.deepEqual(window.localStorage.getItem('accessToken'), accessToken),
     );
   });
+
+  it('Should prevent multiple submits', () => {
+    const mockOk = Interceptor.mockOk('POST', /signup/, { accessToken: faker.random.uuid() });
+
+    cy.getByTestId('name').focus().type(faker.random.words());
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    const password = faker.internet.password(5);
+    cy.getByTestId('password').focus().type(password);
+    cy.getByTestId('passwordConfirmation').focus().type(password);
+
+    cy.getByTestId('submit')
+      .dblclick()
+      .then(() => mockOk.testCount(1));
+  });
 });
