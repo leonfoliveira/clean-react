@@ -106,4 +106,18 @@ describe('Login', () => {
       .dblclick()
       .then(() => assert.deepEqual(count, 1));
   });
+
+  it('Should submit when enter is pressed', () => {
+    let count = 0;
+    cy.intercept(/login/, (req) => {
+      count += 1;
+      req.reply({ statusCode: faker.random.arrayElement([200, 400, 401, 404, 500]) });
+    });
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    cy.getByTestId('password')
+      .focus()
+      .type(faker.internet.password(5))
+      .type('{enter}')
+      .then(() => assert.deepEqual(count, 1));
+  });
 });
