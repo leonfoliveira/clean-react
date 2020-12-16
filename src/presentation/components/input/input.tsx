@@ -15,8 +15,16 @@ const Input: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className={Styles.inputWrap}>
-      <label htmlFor={props.id || props.name}>
+    <div
+      className={Styles.inputWrap}
+      data-status={error ? 'invalid' : 'valid'}
+      data-testid={`${props.name}-wrap`}
+    >
+      <label
+        htmlFor={props.id || props.name}
+        title={error && error}
+        data-testid={`${props.name}-label`}
+      >
         <input
           id={props.name}
           {...props}
@@ -31,15 +39,6 @@ const Input: React.FC<Props> = (props) => {
         />
         <span>{props.placeholder}</span>
       </label>
-      <span
-        className={Styles.status}
-        role="img"
-        aria-label="invalid"
-        title={error || 'Tudo Certo!'}
-        data-testid={`${props.name}-status`}
-      >
-        {error ? '🔴' : '🟢'}
-      </span>
     </div>
   );
 };
