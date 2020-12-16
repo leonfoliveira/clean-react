@@ -42,7 +42,7 @@ describe('Login', () => {
   });
 
   it('Should present error if invalid credentials are provided', () => {
-    Interceptor.mockInvalidCredentialsError(/login/);
+    Interceptor.mockUnauthorized(/login/);
 
     cy.getByTestId('email').focus().type(faker.internet.email());
     cy.getByTestId('password').focus().type(faker.internet.password(5));
@@ -53,7 +53,7 @@ describe('Login', () => {
   });
 
   it('Should present UnexpectedError on any other error', () => {
-    Interceptor.mockUnexpectedError('POST', /login/);
+    Interceptor.mockCustomErrors('POST', /login/, [400, 404, 500]);
 
     cy.getByTestId('email').focus().type(faker.internet.email());
     cy.getByTestId('password').focus().type(faker.internet.password(5));

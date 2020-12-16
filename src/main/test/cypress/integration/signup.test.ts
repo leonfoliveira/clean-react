@@ -50,7 +50,7 @@ describe('Signup', () => {
   });
 
   it('Should present error if email is already in use', () => {
-    Interceptor.mockEmailInUseError(/signup/);
+    Interceptor.mockForbidden(/signup/);
 
     cy.getByTestId('name').focus().type(faker.random.words());
     cy.getByTestId('email').focus().type(faker.internet.email());
@@ -64,7 +64,7 @@ describe('Signup', () => {
   });
 
   it('Should present UnexpectedError on any other error', () => {
-    Interceptor.mockUnexpectedError('POST', /signup/);
+    Interceptor.mockCustomErrors('POST', /signup/, [400, 404, 500]);
 
     cy.getByTestId('name').focus().type(faker.random.words());
     cy.getByTestId('email').focus().type(faker.internet.email());
