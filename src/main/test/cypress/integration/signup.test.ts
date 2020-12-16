@@ -123,4 +123,13 @@ describe('Signup', () => {
       .dblclick()
       .then(() => mockOk.testCount(1));
   });
+
+  it('Should not submit if form is invalid', () => {
+    const mockOk = Interceptor.mockOk('POST', /signup/, { accessToken: faker.random.uuid() });
+    cy.getByTestId('email')
+      .focus()
+      .type(faker.internet.email())
+      .type('{enter}')
+      .then(() => mockOk.testCount(0));
+  });
 });
