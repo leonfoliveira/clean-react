@@ -39,4 +39,15 @@ describe('RemoteLoadSurveyList', () => {
 
     expect(promise).rejects.toThrow(new UnexpectedError());
   });
+
+  test('Should throw UnexpectedError if HttpPostClient returns 404', async () => {
+    const { sut, httpGetClientSpy } = makeSut(faker.internet.url());
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.notFound,
+    };
+
+    const promise = sut.loadAll();
+
+    expect(promise).rejects.toThrow(new UnexpectedError());
+  });
 });
