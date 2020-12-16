@@ -1,6 +1,7 @@
 import faker from 'faker';
 
 import * as FormHelper from '../support/form-helper';
+import { Interceptor } from '../support/interceptor';
 
 describe('Signup', () => {
   beforeEach(() => {
@@ -46,5 +47,19 @@ describe('Signup', () => {
 
     cy.getByTestId('submit').should('not.have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
+  });
+
+  it('Should present error if email is already in use', () => {
+    Interceptor.mockEmailInUseError(/signup/);
+
+    cy.getByTestId('name').focus().type(faker.random.words());
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    const password = faker.internet.password(5);
+    cy.getByTestId('password').focus().type(password);
+    cy.getByTestId('passwordConfirmation').focus().type(password);
+
+    cy.getByTestId('submit').click();
+    FormHelper.testMainError('This email is already in use');
+    FormHelper.testUrl('/signup');
   });
 });

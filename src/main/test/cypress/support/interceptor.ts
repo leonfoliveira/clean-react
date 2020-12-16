@@ -15,6 +15,10 @@ export class Interceptor {
     return new Interceptor(method, url, 200, body);
   }
 
+  static mockEmailInUseError(url: RegExp) {
+    return new Interceptor('POST', url, 403, { error: faker.random.words() });
+  }
+
   static mockInvalidCredentialsError(url: RegExp) {
     return new Interceptor('POST', url, 401, { error: faker.random.words() });
   }
