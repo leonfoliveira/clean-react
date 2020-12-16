@@ -15,6 +15,6 @@ describe('LocalStorageAdapter', () => {
 
     await sut.set(key, value);
 
-    expect(localStorage.setItem).toHaveBeenCalledWith(key, JSON.stringify(value));
+    expect(localStorage.setItem).toHaveBeenCalledWith(key, value);
   });
 });
