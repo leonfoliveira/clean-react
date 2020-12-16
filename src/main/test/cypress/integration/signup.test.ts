@@ -90,4 +90,23 @@ describe('Signup', () => {
     FormHelper.testMainError('Something wrong happened. Try again.');
     FormHelper.testUrl('/signup');
   });
+
+  it('Should present save accessToken if valid credentials are provided', () => {
+    const accessToken = faker.random.uuid();
+    Interceptor.mockOk('POST', /signup/, { accessToken });
+
+    cy.getByTestId('name').focus().type(faker.random.words());
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    const password = faker.internet.password(5);
+    cy.getByTestId('password').focus().type(password);
+    cy.getByTestId('passwordConfirmation').focus().type(password);
+
+    cy.getByTestId('submit').click();
+    cy.getByTestId('main-error').should('not.exist');
+    cy.getByTestId('spinner').should('not.exist');
+    FormHelper.testUrl('/');
+    cy.window().then((window) =>
+      assert.deepEqual(window.localStorage.getItem('accessToken'), accessToken),
+    );
+  });
 });
