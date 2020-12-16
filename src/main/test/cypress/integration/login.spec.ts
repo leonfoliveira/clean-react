@@ -47,9 +47,7 @@ describe('Login', () => {
   });
 
   it('Should present error if invalid credentials are provided', () => {
-    cy.intercept(/login/, (req) => {
-      req.reply({ statusCode: 401 });
-    });
+    cy.intercept(/login/, { statusCode: 401 });
     cy.getByTestId('email').focus().type(faker.internet.email());
     cy.getByTestId('password').focus().type(faker.internet.password(5));
     cy.getByTestId('submit').click();
@@ -59,9 +57,7 @@ describe('Login', () => {
   });
 
   it('Should present UnexpectedError on any other error', () => {
-    cy.intercept(/login/, (req) => {
-      req.reply({ statusCode: faker.random.arrayElement([400, 404, 500]) });
-    });
+    cy.intercept(/login/, { statusCode: faker.random.arrayElement([400, 404, 500]) });
     cy.getByTestId('email').focus().type(faker.internet.email());
     cy.getByTestId('password').focus().type(faker.internet.password(5));
     cy.getByTestId('submit').click();
@@ -71,8 +67,8 @@ describe('Login', () => {
   });
 
   it('Should present UnexpectedError if invalid data is returned', () => {
-    cy.intercept(/login/, (req) => {
-      req.reply({ statusCode: 200, body: { invalidProperty: faker.random.uuid() } });
+    cy.intercept(/login/, {
+      body: { invalidProperty: faker.random.uuid() },
     });
     cy.getByTestId('email').focus().type(faker.internet.email());
     cy.getByTestId('password').focus().type(faker.internet.password(5));
@@ -84,8 +80,8 @@ describe('Login', () => {
 
   it('Should present save accessToken if valid credentials are provided', () => {
     const accessToken = faker.random.uuid();
-    cy.intercept(/login/, (req) => {
-      req.reply({ statusCode: 200, body: { accessToken } });
+    cy.intercept(/login/, {
+      body: { accessToken },
     });
     cy.getByTestId('email').focus().type(faker.internet.email());
     cy.getByTestId('password').focus().type(faker.internet.password(5));
@@ -96,5 +92,18 @@ describe('Login', () => {
     cy.window().then((window) =>
       assert.deepEqual(window.localStorage.getItem('accessToken'), accessToken),
     );
+  });
+
+  it('Should prevent multiple submits', () => {
+    let count = 0;
+    cy.intercept(/login/, (req) => {
+      count += 1;
+      req.reply({ statusCode: 200, body: { accessToken: faker.random.uuid() } });
+    });
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    cy.getByTestId('password').focus().type(faker.internet.password(5));
+    cy.getByTestId('submit')
+      .dblclick()
+      .then(() => assert.deepEqual(count, 1));
   });
 });
