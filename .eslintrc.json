@@ -32,6 +32,7 @@
       "error",
       "always",
       { "exceptAfterSingleLine": true }
-    ]
+    ],
+    "@typescript-eslint/indent": "off"
   }
 }

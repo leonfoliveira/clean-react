@@ -11,11 +11,11 @@ import { RemoteRegistration } from './remote-registration';
 
 type SutTypes = {
   sut: RemoteRegistration;
-  httpPostClientSpy: HttpPostClientSpy<RegistrationParams, AccountModel>;
+  httpPostClientSpy: HttpPostClientSpy<AccountModel, RegistrationParams>;
 };
 
 const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpPostClientSpy = new HttpPostClientSpy<RegistrationParams, AccountModel>();
+  const httpPostClientSpy = new HttpPostClientSpy<AccountModel, RegistrationParams>();
   const sut = new RemoteRegistration(url, httpPostClientSpy);
 
   return { sut, httpPostClientSpy };

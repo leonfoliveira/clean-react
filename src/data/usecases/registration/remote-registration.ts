@@ -6,7 +6,7 @@ import { Registration, RegistrationParams } from '@/domain/usecases/registration
 export class RemoteRegistration implements Registration {
   constructor(
     private readonly url: string,
-    private readonly httpPostClient: HttpPostClient<RegistrationParams, AccountModel>,
+    private readonly httpPostClient: HttpPostClient<AccountModel, RegistrationParams>,
   ) {}
 
   async register(params: RegistrationParams): Promise<AccountModel> {
