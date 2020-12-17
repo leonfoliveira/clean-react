@@ -7,50 +7,6 @@
   min-height: 100vh;
   background-color: $disabledBackground;
 
-  .headerWrap {
-    display: flex;
-    justify-content: center;
-    border-top: 40px solid $primaryDark;
-    background-color: $primary;
-
-    .headerContent {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      max-width: 800px;
-      padding: 24px 40px;
-
-      img {
-        align-self: center;
-        width: 60px;
-      }
-
-      .logoutWrap {
-        align-self: center;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: center;
-        color: $white;
-
-        span {
-          margin-bottom: 8px;
-          font-size: 16px;
-        }
-
-        a {
-          color: $white;
-          text-decoration: none;
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-      }
-    }
-  }
-
   .contentWrap {
     align-self: center;
     flex-grow: 1;
