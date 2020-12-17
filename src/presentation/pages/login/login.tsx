@@ -49,7 +49,7 @@ const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccou
 
       setState({ ...state, isLoading: true });
       const account = await authentication.auth({ email: state.email, password: state.password });
-      await updateCurrentAccount.save(account);
+      updateCurrentAccount.save(account);
       history.replace('/');
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message });

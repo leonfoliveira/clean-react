@@ -224,7 +224,9 @@ describe('Login Component', () => {
     const { sut, updateCurrentAccountMock } = makeSut();
     const error = new EmailInUseError();
 
-    jest.spyOn(updateCurrentAccountMock, 'save').mockRejectedValueOnce(error);
+    jest.spyOn(updateCurrentAccountMock, 'save').mockImplementationOnce(() => {
+      throw error;
+    });
     await simulateValidSubmit(sut);
 
     Helper.testElementText(sut, 'main-error', error.message);

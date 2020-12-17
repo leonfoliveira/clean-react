@@ -62,7 +62,7 @@ const Signup: React.FC<Props> = ({ validation, registration, updateCurrentAccoun
         password: state.password,
         passwordConfirmation: state.passwordConfirmation,
       });
-      await updateCurrentAccount.save(account);
+      updateCurrentAccount.save(account);
       history.replace('/');
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message });
