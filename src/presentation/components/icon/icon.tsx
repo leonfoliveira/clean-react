@@ -20,6 +20,7 @@ const Icon: React.FC<Props> = ({ iconName, className }) => {
         className={Styles.icon}
         src={iconName}
         alt={iconName === IconName.thumbDown ? 'answered' : 'not answered'}
+        data-testid="icon"
       />
     </div>
   );
