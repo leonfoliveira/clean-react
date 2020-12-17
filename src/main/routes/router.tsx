@@ -8,7 +8,9 @@ import { ApiContext } from '@/presentation/contexts';
 import { SurveyList } from '@/presentation/pages';
 
 const Router: React.FC = () => (
-  <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountAdapter }}>
+  <ApiContext.Provider
+    value={{ setCurrentAccount: setCurrentAccountAdapter, getCurrentAccount: () => null }}
+  >
     <BrowserRouter>
       <Switch>
         <Route path="/login" exact component={makeLogin} />
