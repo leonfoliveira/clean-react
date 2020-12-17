@@ -97,6 +97,7 @@
             align-self: center;
             margin: 24px;
             font-size: 18px;
+            flex-grow: 1;
           }
         }
 
@@ -117,6 +118,20 @@
               opacity: 1;
             }
           }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .surveyListWrap {
+    .contentWrap {
+      ul {
+        flex-direction: column;
+
+        li {
+          flex-basis: 100%;
         }
       }
     }
