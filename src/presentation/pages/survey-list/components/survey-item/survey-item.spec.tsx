@@ -24,4 +24,18 @@ describe('SurveyItem Component', () => {
     expect(screen.getByTestId('year')).toHaveTextContent('2020');
     expect(screen.getByTestId('question')).toHaveTextContent(survey.question);
   });
+
+  it('Should render with correct values', () => {
+    const survey = Object.assign(mockSurveyModel(), {
+      didAnswer: false,
+      date: new Date('2019-05-03T00:00:00'),
+    });
+    makeSut(survey);
+
+    expect(screen.getByTestId('icon')).toHaveProperty('src', IconName.thumbDown);
+    expect(screen.getByTestId('day')).toHaveTextContent('03');
+    expect(screen.getByTestId('month')).toHaveTextContent('mai');
+    expect(screen.getByTestId('year')).toHaveTextContent('2019');
+    expect(screen.getByTestId('question')).toHaveTextContent(survey.question);
+  });
 });
