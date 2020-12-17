@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 
 import { Footer, Header } from '@/presentation/components';
@@ -9,7 +8,7 @@ import Styles from './survey-list-styles.scss';
 const SurveyList: React.FC = () => (
   <div className={Styles.surveyListWrap}>
     <Header />
-    <div className={Styles.contentWrap}>
+    <div className={Styles.contentWrap} onClick={() => {}}>
       <h2>Enquetes</h2>
       <ul data-testid="survey-list">
         <SurveyItemEmpty />
