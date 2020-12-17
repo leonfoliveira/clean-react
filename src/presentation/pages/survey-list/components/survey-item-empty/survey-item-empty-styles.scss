@@ -1,0 +1,53 @@
+@import '~@/presentation/styles/colors.scss';
+
+.surveyItemEmpty {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-basis: 48%;
+  height: 250px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  background-color: $white;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(to right, $disabledBackground, $disabledBackground),
+    linear-gradient(to right, $disabledBackground, $disabledBackground),
+    linear-gradient(to right, $disabledBackground, $disabledBackground),
+    linear-gradient(to right, $disabledBackground, $disabledBackground),
+    linear-gradient(to right, $disabledBackground, $disabledBackground);
+  background-position: 24px 55px, 0px bottom, 108px 73px, 108px 95px, 108px 117px;
+  background-size: 60px 100px, 100% 40px, 140px 18px, 120px 18px, 160px 18px;
+  box-shadow: 0 1px 3px -1px $black;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(to right, transparent, rgba($white, 0.2), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 1.2s infinite;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .surveyListWrap {
+    .contentWrap {
+      ul {
+        li {
+          flex-basis: 100%;
+        }
+      }
+    }
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

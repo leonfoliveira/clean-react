@@ -10,11 +10,7 @@ const SurveyList: React.FC = () => (
     <Header />
     <div className={Styles.contentWrap}>
       <h2>Enquetes</h2>
-      <ul>
-        <li />
-        <li />
-        <li />
-      </ul>
+      <ul />
     </div>
     <Footer />
   </div>
