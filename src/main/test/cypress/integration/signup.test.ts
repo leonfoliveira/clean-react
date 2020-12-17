@@ -82,7 +82,7 @@ describe('Signup', () => {
     FormHelper.testUrl('/signup');
   });
 
-  it('Should present save accessToken if valid credentials are provided', () => {
+  it('Should save account if valid credentials are provided', () => {
     const account = FormHelper.mockAccount();
     Interceptor.mockOk('POST', /signup/, account);
     simulateValidSubmit();

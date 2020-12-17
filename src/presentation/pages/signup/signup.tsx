@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import Context from '@/presentation/contexts/form-context';
+import { ApiContext, FormContext } from '@/presentation/contexts';
 
 import { Validation } from '@/presentation/protocols/validation';
 import { LoginHeader, Input, FormStatus, Footer, SubmitButton } from '@/presentation/components';
-import { Registration, UpdateCurrentAccount } from '@/domain/usecases';
+import { Registration } from '@/domain/usecases';
 
 import Styles from './signup-styles.scss';
 
 type Props = {
   validation: Validation;
   registration: Registration;
-  updateCurrentAccount: UpdateCurrentAccount;
 };
-const Signup: React.FC<Props> = ({ validation, registration, updateCurrentAccount }) => {
+const Signup: React.FC<Props> = ({ validation, registration }) => {
   const history = useHistory();
+  const { setCurrentAccount } = useContext(ApiContext);
   const [state, setState] = useState({
     isLoading: false,
     isFormInvalid: true,
@@ -62,7 +62,7 @@ const Signup: React.FC<Props> = ({ validation, registration, updateCurrentAccoun
         password: state.password,
         passwordConfirmation: state.passwordConfirmation,
       });
-      updateCurrentAccount.save(account);
+      setCurrentAccount(account);
       history.replace('/');
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message });
@@ -73,7 +73,7 @@ const Signup: React.FC<Props> = ({ validation, registration, updateCurrentAccoun
     <div className={Styles.signupWrap}>
       <LoginHeader />
 
-      <Context.Provider value={{ state, setState }}>
+      <FormContext.Provider value={{ state, setState }}>
         <form className={Styles.form} onSubmit={handleSubmit} data-testid="form">
           <h2>Criar Conta</h2>
 
@@ -89,7 +89,7 @@ const Signup: React.FC<Props> = ({ validation, registration, updateCurrentAccoun
           </Link>
           <FormStatus />
         </form>
-      </Context.Provider>
+      </FormContext.Provider>
 
       <Footer />
     </div>

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Validation } from '@/presentation/protocols/validation';
-import { Authentication, UpdateCurrentAccount } from '@/domain/usecases';
+import { Authentication } from '@/domain/usecases';
 
-import Context from '@/presentation/contexts/form-context';
+import { FormContext, ApiContext } from '@/presentation/contexts';
 
 import { LoginHeader, Input, FormStatus, Footer, SubmitButton } from '@/presentation/components';
 
@@ -12,10 +12,10 @@ import Styles from './login-styles.scss';
 type Props = {
   validation: Validation;
   authentication: Authentication;
-  updateCurrentAccount: UpdateCurrentAccount;
 };
-const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccount }) => {
+const Login: React.FC<Props> = ({ validation, authentication }) => {
   const history = useHistory();
+  const { setCurrentAccount } = useContext(ApiContext);
   const [state, setState] = useState({
     isLoading: false,
     isFormInvalid: true,
@@ -49,7 +49,7 @@ const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccou
 
       setState({ ...state, isLoading: true });
       const account = await authentication.auth({ email: state.email, password: state.password });
-      updateCurrentAccount.save(account);
+      setCurrentAccount(account);
       history.replace('/');
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message });
@@ -60,7 +60,7 @@ const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccou
     <div className={Styles.loginWrap}>
       <LoginHeader />
 
-      <Context.Provider value={{ state, setState }}>
+      <FormContext.Provider value={{ state, setState }}>
         <form className={Styles.form} onSubmit={handleSubmit} data-testid="form">
           <h2>Login</h2>
 
@@ -74,7 +74,7 @@ const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccou
           </Link>
           <FormStatus />
         </form>
-      </Context.Provider>
+      </FormContext.Provider>
 
       <Footer />
     </div>
