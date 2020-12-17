@@ -11,7 +11,7 @@ export const mockAuthentication = (): AuthenticationParams => ({
 export const mockRegistration = (): RegistrationParams => {
   const password = faker.internet.password();
   return {
-    name: faker.random.words(),
+    name: faker.name.findName(),
     email: faker.internet.email(),
     password,
     passwordConfirmation: password,
@@ -19,5 +19,6 @@ export const mockRegistration = (): RegistrationParams => {
 };
 
 export const mockAccountModel = (): AccountModel => ({
+  name: faker.name.findName(),
   accessToken: faker.random.uuid(),
 });

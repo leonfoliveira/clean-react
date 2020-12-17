@@ -1,4 +1,11 @@
+import faker from 'faker';
+
 const { baseUrl } = Cypress.config();
+
+export const mockAccount = () => ({
+  name: faker.name.findName(),
+  accessToken: faker.random.uuid(),
+});
 
 export const testInputStatus = (field: string, error = ''): void => {
   cy.getByTestId(`${field}-wrap`).should('have.attr', 'data-status', error ? 'invalid' : 'valid');

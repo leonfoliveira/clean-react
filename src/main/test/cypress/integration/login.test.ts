@@ -72,18 +72,18 @@ describe('Login', () => {
   });
 
   it('Should present save accessToken if valid credentials are provided', () => {
-    const accessToken = faker.random.uuid();
-    Interceptor.mockOk('POST', /login/, { accessToken });
+    const account = FormHelper.mockAccount();
+    Interceptor.mockOk('POST', /login/, account);
     simulateValidSubmit();
 
     cy.getByTestId('main-error').should('not.exist');
     cy.getByTestId('spinner').should('not.exist');
     FormHelper.testUrl('/');
-    FormHelper.testLocalStorage('accessToken', accessToken);
+    FormHelper.testLocalStorage('account', JSON.stringify(account));
   });
 
   it('Should prevent multiple submits', () => {
-    const mockOk = Interceptor.mockOk('POST', /login/, { accessToken: faker.random.uuid() });
+    const mockOk = Interceptor.mockOk('POST', /login/, FormHelper.mockAccount());
     populateFields();
 
     cy.getByTestId('submit')
@@ -92,7 +92,7 @@ describe('Login', () => {
   });
 
   it('Should not submit if form is invalid', () => {
-    const mockOk = Interceptor.mockOk('POST', /login/, { accessToken: faker.random.uuid() });
+    const mockOk = Interceptor.mockOk('POST', /login/, FormHelper.mockAccount());
     cy.getByTestId('email')
       .focus()
       .type(faker.internet.email())
