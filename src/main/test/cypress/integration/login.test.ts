@@ -1,13 +1,13 @@
 import faker from 'faker';
 
-import * as FormHelper from '../support/form-helper';
+import * as Helpers from '../support/helpers';
 import { Interceptor } from '../support/interceptor';
 
 const populateFields = (): void => {
   cy.getByTestId('email').focus().type(faker.internet.email());
-  FormHelper.testInputStatus('email');
+  Helpers.testInputStatus('email');
   cy.getByTestId('password').focus().type(faker.internet.password(5));
-  FormHelper.testInputStatus('password');
+  Helpers.testInputStatus('password');
 };
 
 const simulateValidSubmit = (): void => {
@@ -22,9 +22,9 @@ describe('Login', () => {
 
   it('Should load with correct initial state', () => {
     cy.getByTestId('email').should('have.attr', 'readOnly');
-    FormHelper.testInputStatus('email', 'Campo Obrigatório');
+    Helpers.testInputStatus('email', 'Campo Obrigatório');
     cy.getByTestId('password').should('have.attr', 'readOnly');
-    FormHelper.testInputStatus('password', 'Campo Obrigatório');
+    Helpers.testInputStatus('password', 'Campo Obrigatório');
 
     cy.getByTestId('submit').should('have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
@@ -32,9 +32,9 @@ describe('Login', () => {
 
   it('Should present error state if form is invalid', () => {
     cy.getByTestId('email').focus().type(faker.random.word());
-    FormHelper.testInputStatus('email', 'Valor inválido');
+    Helpers.testInputStatus('email', 'Valor inválido');
     cy.getByTestId('password').focus().type(faker.internet.password(3));
-    FormHelper.testInputStatus('password', 'Valor inválido');
+    Helpers.testInputStatus('password', 'Valor inválido');
 
     cy.getByTestId('submit').should('have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
@@ -51,39 +51,31 @@ describe('Login', () => {
     Interceptor.mockUnauthorized(/login/);
     simulateValidSubmit();
 
-    FormHelper.testMainError('Invalid Credentials');
-    FormHelper.testUrl('/login');
+    Helpers.testMainError('Invalid Credentials');
+    Helpers.testUrl('/login');
   });
 
   it('Should present UnexpectedError on any other error', () => {
     Interceptor.mockCustomErrors('POST', /login/, [400, 404, 500]);
     simulateValidSubmit();
 
-    FormHelper.testMainError('Something wrong happened. Try again.');
-    FormHelper.testUrl('/login');
-  });
-
-  it('Should present UnexpectedError if invalid data is returned', () => {
-    Interceptor.mockOk('POST', /login/, { invalidProperty: faker.random.uuid() });
-    simulateValidSubmit();
-
-    FormHelper.testMainError('Something wrong happened. Try again.');
-    FormHelper.testUrl('/login');
+    Helpers.testMainError('Something wrong happened. Try again.');
+    Helpers.testUrl('/login');
   });
 
   it('Should save account if valid credentials are provided', () => {
-    const account = FormHelper.mockAccount();
+    const account = Helpers.mockAccount();
     Interceptor.mockOk('POST', /login/, account);
     simulateValidSubmit();
 
     cy.getByTestId('main-error').should('not.exist');
     cy.getByTestId('spinner').should('not.exist');
-    FormHelper.testUrl('/');
-    FormHelper.testLocalStorage('account', JSON.stringify(account));
+    Helpers.testUrl('/');
+    Helpers.testLocalStorage('account', JSON.stringify(account));
   });
 
   it('Should prevent multiple submits', () => {
-    const mockOk = Interceptor.mockOk('POST', /login/, FormHelper.mockAccount());
+    const mockOk = Interceptor.mockOk('POST', /login/, Helpers.mockAccount());
     populateFields();
 
     cy.getByTestId('submit')
@@ -92,7 +84,7 @@ describe('Login', () => {
   });
 
   it('Should not submit if form is invalid', () => {
-    const mockOk = Interceptor.mockOk('POST', /login/, FormHelper.mockAccount());
+    const mockOk = Interceptor.mockOk('POST', /login/, Helpers.mockAccount());
     cy.getByTestId('email')
       .focus()
       .type(faker.internet.email())
