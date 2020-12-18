@@ -15,8 +15,8 @@ export class Interceptor {
     return new Interceptor(method, url, 200, body);
   }
 
-  static mockForbidden(url: RegExp) {
-    return new Interceptor('POST', url, 403, { error: faker.random.words() });
+  static mockForbidden(method: Method, url: RegExp) {
+    return new Interceptor(method, url, 403, { error: faker.random.words() });
   }
 
   static mockUnauthorized(url: RegExp) {

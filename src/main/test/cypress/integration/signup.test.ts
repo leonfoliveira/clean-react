@@ -59,7 +59,7 @@ describe('Signup', () => {
   });
 
   it('Should present error if email is already in use', () => {
-    Interceptor.mockForbidden(/signup/);
+    Interceptor.mockForbidden('POST', /signup/);
     simulateValidSubmit();
 
     Helpers.testMainError('This email is already in use');

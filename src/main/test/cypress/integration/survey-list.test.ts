@@ -11,4 +11,10 @@ describe('SurveyList', () => {
     cy.visit('');
     cy.getByTestId('error').should('contain.text', 'Something wrong happened. Try again.');
   });
+
+  it('Should logout on AccessDeniedError', () => {
+    Interceptor.mockForbidden('GET', /surveys/);
+    cy.visit('');
+    Helpers.testUrl('/login');
+  });
 });
