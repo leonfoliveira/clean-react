@@ -24,4 +24,11 @@ describe('SurveyList', () => {
     const { name } = Helpers.getLocalStorageItem('account');
     cy.getByTestId('username').should('contain.text', name);
   });
+
+  it('Should logout on logout link click', () => {
+    Interceptor.mockServerError('GET', /surveys/);
+    cy.visit('');
+    cy.getByTestId('logout').click();
+    Helpers.testUrl('/login');
+  });
 });
