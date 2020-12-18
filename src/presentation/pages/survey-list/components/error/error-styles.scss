@@ -1,0 +1,18 @@
+@import '~@/presentation/styles/colors.scss';
+
+.errorWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 40px;
+  border-radius: 8px;
+  background-color: $white;
+  box-shadow: 0 1px 3px -1px $black;
+  text-align: center;
+
+  span {
+    margin-bottom: 24px;
+    font-size: 20px;
+  }
+}

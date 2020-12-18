@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import SurveyContext from '@/presentation/pages/survey-list/contexts/survey-context';
-import { SurveyItem, SurveyItemEmpty } from './components';
+import { SurveyItem, SurveyItemEmpty } from '@/presentation/pages/survey-list/components';
 
 import Styles from './list-styles.scss';
 
