@@ -2,7 +2,7 @@ import axios from 'axios';
 import faker from 'faker';
 
 export const mockHttpResponse = (): any => ({
-  data: faker.random.objectElement(),
+  data: faker.random.objectElement<{}>(),
   status: faker.random.number(),
 });
 

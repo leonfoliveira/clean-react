@@ -4,16 +4,17 @@ import { createMemoryHistory } from 'history';
 import faker from 'faker';
 import { fireEvent, render, waitFor, screen } from '@testing-library/react';
 
-import { Helper, ValidationStub, RegistrationSpy } from '@/presentation/test';
+import { Helper, ValidationStub } from '@/presentation/test';
 import { EmailInUseError } from '@/domain/errors';
-
-import { AccountModel } from '@/domain/models';
 import { ApiContext } from '@/presentation/contexts';
+import { Registration } from '@/domain/usecases';
+import { RegistrationSpy } from '@/domain/test';
+
 import Signup from './signup';
 
 type SutTypes = {
   registrationSpy: RegistrationSpy;
-  setCurrentAccountMock: (account: AccountModel) => void;
+  setCurrentAccountMock: (account: Registration.Model) => void;
 };
 
 type SutParams = {

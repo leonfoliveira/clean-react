@@ -1,15 +1,14 @@
 import { HttpPostClient, HttpStatusCode } from '@/data/protocols/http';
 import { EmailInUseError, UnexpectedError } from '@/domain/errors';
-import { AccountModel } from '@/domain/models';
-import { Registration, RegistrationParams } from '@/domain/usecases/registration';
+import { Registration } from '@/domain/usecases/registration';
 
 export class RemoteRegistration implements Registration {
   constructor(
     private readonly url: string,
-    private readonly httpPostClient: HttpPostClient<AccountModel, RegistrationParams>,
+    private readonly httpPostClient: HttpPostClient<RemoteRegistration.Model, Registration.Params>,
   ) {}
 
-  async register(params: RegistrationParams): Promise<AccountModel> {
+  async register(params: Registration.Params): Promise<Registration.Model> {
     const httpResponse = await this.httpPostClient.post({ url: this.url, body: params });
 
     switch (httpResponse.statusCode) {
@@ -21,4 +20,8 @@ export class RemoteRegistration implements Registration {
         throw new UnexpectedError();
     }
   }
+}
+
+export namespace RemoteRegistration {
+  export type Model = Registration.Model;
 }

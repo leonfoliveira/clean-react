@@ -5,16 +5,17 @@ import faker from 'faker';
 import 'jest-localstorage-mock';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 
-import { AuthenticationSpy, ValidationStub, Helper } from '@/presentation/test';
+import { ValidationStub, Helper } from '@/presentation/test';
 import { InvalidCredentialsError } from '@/domain/errors';
 import { ApiContext } from '@/presentation/contexts';
-import { AccountModel } from '@/domain/models';
+import { Authentication } from '@/domain/usecases';
+import { AuthenticationSpy } from '@/domain/test';
 
 import Login from './login';
 
 type SutTypes = {
   authenticationSpy: AuthenticationSpy;
-  setCurrentAccountMock: (account: AccountModel) => void;
+  setCurrentAccountMock: (account: Authentication.Model) => void;
 };
 
 type SutParams = {

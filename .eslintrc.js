@@ -31,6 +31,7 @@ module.exports = {
       'error',
       { devDependencies: ['**/test/**', '**/*.test.*', '**/*.spec.*'] },
     ],
+    'import/export': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'off',
     'react/destructuring-assignment': 'off',
