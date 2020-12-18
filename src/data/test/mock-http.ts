@@ -31,19 +31,22 @@ export class HttpPostClientSpy<ResponseType, BodyType = any>
     this.url = params.url;
     this.body = params.body;
 
-    return Promise.resolve(this.response);
+    return this.response;
   }
 }
 
-export class HttpGetClientSpy<ResponseType> implements HttpGetClient<ResponseType> {
+export class HttpGetClientSpy<ResponseType, HeadersType = any>
+  implements HttpGetClient<ResponseType, HeadersType> {
   url: string;
+  headers?: object;
   response: HttpResponse<ResponseType> = {
     statusCode: HttpStatusCode.ok,
   };
 
   async get(params: HttpGetParams): Promise<HttpResponse<ResponseType>> {
     this.url = params.url;
+    this.headers = params.headers;
 
-    return Promise.resolve(this.response);
+    return this.response;
   }
 }
