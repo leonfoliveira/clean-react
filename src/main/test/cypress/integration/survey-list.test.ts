@@ -1,32 +1,38 @@
-import * as Helpers from '../support/helpers';
-import { Interceptor } from '../support/interceptor';
+import * as Helpers from '../utils/helpers';
+import { Interceptor } from '../utils/interceptor';
+
+const path = /surveys/;
+const mockUnexpectedError = () => Interceptor.mockCustomErrors('GET', path, [404, 500]);
+const mockAccessDeniedError = () => Interceptor.mockForbidden('GET', path);
 
 describe('SurveyList', () => {
   beforeEach(() => {
-    Helpers.setLocalStorageItem('account', Helpers.mockAccount());
+    cy.fixture('account').then((account) => {
+      Helpers.setLocalStorageItem('account', account);
+    });
   });
 
   it('Should present error on UnexpectedError', () => {
-    Interceptor.mockCustomErrors('GET', /surveys/, [404, 500]);
+    mockUnexpectedError();
     cy.visit('');
     cy.getByTestId('error').should('contain.text', 'Something wrong happened. Try again.');
   });
 
   it('Should logout on AccessDeniedError', () => {
-    Interceptor.mockForbidden('GET', /surveys/);
+    mockAccessDeniedError();
     cy.visit('');
     Helpers.testUrl('/login');
   });
 
   it('Should present correct username', () => {
-    Interceptor.mockServerError('GET', /surveys/);
+    mockUnexpectedError();
     cy.visit('');
     const { name } = Helpers.getLocalStorageItem('account');
     cy.getByTestId('username').should('contain.text', name);
   });
 
   it('Should logout on logout link click', () => {
-    Interceptor.mockServerError('GET', /surveys/);
+    mockUnexpectedError();
     cy.visit('');
     cy.getByTestId('logout').click();
     Helpers.testUrl('/login');

@@ -1,7 +1,7 @@
 import faker from 'faker';
 
-import * as Helpers from '../support/helpers';
-import { Interceptor } from '../support/interceptor';
+import * as Helpers from '../utils/helpers';
+import { Interceptor } from '../utils/interceptor';
 
 const populateFields = (): void => {
   cy.getByTestId('name').focus().type(faker.random.words());
@@ -19,6 +19,11 @@ const simulateValidSubmit = (): void => {
   populateFields();
   cy.getByTestId('submit').click();
 };
+
+const path = /signup/;
+const mockEmailInUseError = () => Interceptor.mockForbidden('POST', path);
+const mockUnexpectedError = () => Interceptor.mockCustomErrors('POST', path, [400, 404, 500]);
+const mockSuccess = () => Interceptor.mockOk('POST', path, { fixture: 'account' });
 
 describe('Signup', () => {
   beforeEach(() => {
@@ -59,7 +64,7 @@ describe('Signup', () => {
   });
 
   it('Should present error if email is already in use', () => {
-    Interceptor.mockForbidden('POST', /signup/);
+    mockEmailInUseError();
     simulateValidSubmit();
 
     Helpers.testMainError('This email is already in use');
@@ -67,7 +72,7 @@ describe('Signup', () => {
   });
 
   it('Should present UnexpectedError on any other error', () => {
-    Interceptor.mockCustomErrors('POST', /signup/, [400, 404, 500]);
+    mockUnexpectedError();
     simulateValidSubmit();
 
     Helpers.testMainError('Something wrong happened. Try again.');
@@ -75,33 +80,30 @@ describe('Signup', () => {
   });
 
   it('Should save account if valid credentials are provided', () => {
-    const account = Helpers.mockAccount();
-    Interceptor.mockOk('POST', /signup/, account);
+    mockSuccess();
     simulateValidSubmit();
 
     cy.getByTestId('main-error').should('not.exist');
     cy.getByTestId('spinner').should('not.exist');
     Helpers.testUrl('/');
-    cy.window().then((window) =>
-      assert.deepEqual(window.localStorage.getItem('account'), JSON.stringify(account)),
-    );
+    Helpers.testLocalStorageItem('account');
   });
 
   it('Should prevent multiple submits', () => {
-    const mockOk = Interceptor.mockOk('POST', /signup/, Helpers.mockAccount());
+    const interceptor = mockSuccess();
     populateFields();
 
     cy.getByTestId('submit')
       .dblclick()
-      .then(() => mockOk.testCount(1));
+      .then(() => interceptor.testCount(1));
   });
 
   it('Should not submit if form is invalid', () => {
-    const mockOk = Interceptor.mockOk('POST', /signup/, Helpers.mockAccount());
+    const interceptor = mockSuccess();
     cy.getByTestId('email')
       .focus()
       .type(faker.internet.email())
       .type('{enter}')
-      .then(() => mockOk.testCount(0));
+      .then(() => interceptor.testCount(0));
   });
 });
