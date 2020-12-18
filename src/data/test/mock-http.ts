@@ -9,13 +9,14 @@ import {
   HttpStatusCode,
 } from '@/data/protocols/http';
 
-export const mockPostRequest = () => ({
+export const mockPostRequest = (): HttpPostParams => ({
   url: faker.internet.url(),
   body: faker.random.objectElement(),
 });
 
-export const mockGetRequest = () => ({
+export const mockGetRequest = (): HttpGetParams => ({
   url: faker.internet.url(),
+  headers: faker.random.objectElement(),
 });
 
 export class HttpPostClientSpy<ResponseType, BodyType = any>
