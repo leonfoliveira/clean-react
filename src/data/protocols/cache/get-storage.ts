@@ -1,3 +1,3 @@
 export interface GetStorage {
-  get(key: string): object;
+  get(key: string): any;
 }
