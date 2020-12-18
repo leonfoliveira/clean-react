@@ -71,7 +71,7 @@ describe('Login', () => {
     cy.getByTestId('main-error').should('not.exist');
     cy.getByTestId('spinner').should('not.exist');
     Helpers.testUrl('/');
-    Helpers.testLocalStorage('account', JSON.stringify(account));
+    Helpers.testLocalStorageItem('account', JSON.stringify(account));
   });
 
   it('Should prevent multiple submits', () => {

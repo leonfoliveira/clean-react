@@ -19,5 +19,8 @@ export const testMainError = (error: string) => {
 
 export const testUrl = (path: string) => cy.url().should('equal', `${baseUrl}${path}`);
 
-export const testLocalStorage = (field: string, value: string) =>
+export const testLocalStorageItem = (field: string, value: string) =>
   cy.window().then((window) => assert.deepEqual(window.localStorage.getItem(field), value));
+
+export const setLocalStorageItem = (key: string, value: object) =>
+  localStorage.setItem(key, JSON.stringify(value));
