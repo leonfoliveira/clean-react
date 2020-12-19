@@ -15,6 +15,8 @@
     "test:ci": "yarn test --coverage",
     "test:coveralls": "yarn test:ci && coveralls < coverage/lcov.info",
     "test:cypress": "cypress open",
+    "test:cypress:run": "cypress run",
+    "test:cypress:ci": "start-server-and-test dev http-get://localhost:8080 test:cypress:run",
     "update": "yarn-check -u -s"
   },
   "dependencies": {
@@ -65,6 +67,7 @@
     "node-sass": "^5.0.0",
     "prettier": "^2.2.1",
     "sass-loader": "^10.1.0",
+    "start-server-and-test": "^1.11.6",
     "style-loader": "^2.0.0",
     "ts-jest": "^26.4.4",
     "ts-loader": "^8.0.12",
