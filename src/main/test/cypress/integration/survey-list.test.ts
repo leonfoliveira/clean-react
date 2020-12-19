@@ -19,6 +19,22 @@ describe('SurveyList', () => {
     cy.getByTestId('error').should('contain.text', 'Something wrong happened. Try again.');
   });
 
+  it('Should reload on button click', () => {
+    let ok = false;
+    cy.intercept('GET', path, (req) => {
+      if (ok) {
+        req.reply({ statusCode: 200, fixture: 'survey-list' });
+      } else {
+        req.reply({ statusCode: 500 });
+      }
+      ok = !ok;
+    });
+    cy.visit('');
+    cy.getByTestId('error').should('contain.text', 'Something wrong happened. Try again.');
+    cy.getByTestId('reload').click();
+    cy.get('li:not(empty)').should('have.length', 2);
+  });
+
   it('Should logout on AccessDeniedError', () => {
     mockAccessDeniedError();
     cy.visit('');
