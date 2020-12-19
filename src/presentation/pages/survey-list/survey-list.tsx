@@ -20,7 +20,7 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }) => {
   });
 
   const handleError = useErrorHandler((error: Error) =>
-    setState({ ...state, error: error.message }),
+    setState((old) => ({ ...old, error: error.message })),
   );
 
   useEffect(() => {

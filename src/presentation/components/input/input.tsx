@@ -11,10 +11,10 @@ const Input: React.FC<Props> = (props) => {
   const error = state.formErrors[`${props.name}Error`];
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      formData: { ...state.formData, [event.target.name]: event.target.value },
-    });
+    setState((old) => ({
+      ...old,
+      formData: { ...old.formData, [event.target.name]: event.target.value },
+    }));
   };
 
   return (
