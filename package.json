@@ -1,6 +1,6 @@
 {
   "name": "clean-react",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "main": "src/main/index.tsx",
   "repository": "https://github.com/leonfoliveira/clean-react.git",
   "author": "Leonardo Oliveira <leonfoliveira@gmail.com>",
@@ -16,7 +16,7 @@
     "test:coveralls": "yarn test:ci && coveralls < coverage/lcov.info",
     "test:cypress": "cypress open",
     "test:cypress:run": "cypress run",
-    "test:cypress:ci": "start-server-and-test dev http-get://localhost:8080 test:cypress:run",
+    "test:cypress:ci": "cypress install && start-server-and-test dev http-get://localhost:8080 test:cypress:run",
     "update": "yarn-check -u -s"
   },
   "dependencies": {

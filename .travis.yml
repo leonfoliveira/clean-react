@@ -4,6 +4,7 @@ node_js:
 addons:
   packages:
     - libgconf-2-4
+cache: yarn
 script:
   - eslint 'src/**'
   - yarn test:coveralls
