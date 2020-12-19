@@ -13,39 +13,48 @@ type Props = {
   validation: Validation;
   registration: Registration;
 };
+
 const Signup: React.FC<Props> = ({ validation, registration }) => {
   const history = useHistory();
   const { setCurrentAccount } = useContext(ApiContext);
   const [state, setState] = useState({
     isLoading: false,
     isFormInvalid: true,
-    name: '',
-    nameError: '',
-    email: '',
-    emailError: '',
-    password: '',
-    passwordError: '',
-    passwordConfirmation: '',
-    passwordConfirmationError: '',
     mainError: '',
+    formData: {
+      name: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
+    },
+    formErrors: {
+      nameError: '',
+      emailError: '',
+      passwordError: '',
+      passwordConfirmationError: '',
+    },
   });
 
+  const validate = (field: string): void => {
+    const fieldError = validation.validate(field, state.formData);
+    setState((old) => ({
+      ...old,
+      formErrors: {
+        ...old.formErrors,
+        [`${field}Error`]: fieldError,
+      },
+    }));
+    setState((old) => ({
+      ...old,
+      isFormInvalid: Object.values({ ...old.formErrors, [`${field}Error`]: fieldError }).some(
+        (error) => error,
+      ),
+    }));
+  };
+
   useEffect(() => {
-    const { name, email, password, passwordConfirmation } = state;
-    const formData = { name, email, password, passwordConfirmation };
-    const nameError = validation.validate('name', formData);
-    const emailError = validation.validate('email', formData);
-    const passwordError = validation.validate('password', formData);
-    const passwordConfirmationError = validation.validate('passwordConfirmation', formData);
-    setState({
-      ...state,
-      nameError,
-      emailError,
-      passwordError,
-      passwordConfirmationError,
-      isFormInvalid: !!nameError || !!emailError || !!passwordError || !!passwordConfirmationError,
-    });
-  }, [state.name, state.email, state.password, state.passwordConfirmation]);
+    Object.keys(state.formData).forEach((field) => validate(field));
+  }, [state.formData]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
@@ -54,14 +63,8 @@ const Signup: React.FC<Props> = ({ validation, registration }) => {
       if (state.isLoading || state.isFormInvalid) {
         return;
       }
-
       setState({ ...state, isLoading: true });
-      const account = await registration.register({
-        name: state.name,
-        email: state.email,
-        password: state.password,
-        passwordConfirmation: state.passwordConfirmation,
-      });
+      const account = await registration.register(state.formData);
       setCurrentAccount(account);
       history.replace('/');
     } catch (error) {

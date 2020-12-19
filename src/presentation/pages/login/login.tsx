@@ -13,31 +13,42 @@ type Props = {
   validation: Validation;
   authentication: Authentication;
 };
+
 const Login: React.FC<Props> = ({ validation, authentication }) => {
   const history = useHistory();
   const { setCurrentAccount } = useContext(ApiContext);
   const [state, setState] = useState({
     isLoading: false,
     isFormInvalid: true,
-    email: '',
-    emailError: '',
-    password: '',
-    passwordError: '',
     mainError: '',
+    formData: {
+      email: '',
+      password: '',
+    },
+    formErrors: {
+      emailError: '',
+      passwordError: '',
+    },
   });
 
+  const validate = (field: string): void => {
+    const fieldError = validation.validate(field, state.formData);
+    setState((old) => ({
+      ...old,
+      formErrors: {
+        ...old.formErrors,
+        [`${field}Error`]: fieldError,
+      },
+    }));
+    setState((old) => ({
+      ...old,
+      isFormInvalid: Object.values(old.formErrors).some((error) => error),
+    }));
+  };
+
   useEffect(() => {
-    const { email, password } = state;
-    const formData = { email, password };
-    const emailError = validation.validate('email', formData);
-    const passwordError = validation.validate('password', formData);
-    setState({
-      ...state,
-      emailError,
-      passwordError,
-      isFormInvalid: !!emailError || !!passwordError,
-    });
-  }, [state.email, state.password]);
+    Object.keys(state.formData).forEach((field) => validate(field));
+  }, [state.formData]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
@@ -46,9 +57,8 @@ const Login: React.FC<Props> = ({ validation, authentication }) => {
       if (state.isLoading || state.isFormInvalid) {
         return;
       }
-
       setState({ ...state, isLoading: true });
-      const account = await authentication.auth({ email: state.email, password: state.password });
+      const account = await authentication.auth(state.formData);
       setCurrentAccount(account);
       history.replace('/');
     } catch (error) {

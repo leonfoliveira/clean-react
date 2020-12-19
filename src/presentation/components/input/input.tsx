@@ -8,10 +8,13 @@ type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>
 
 const Input: React.FC<Props> = (props) => {
   const { state, setState } = useContext(FormContext);
-  const error = state[`${props.name}Error`];
+  const error = state.formErrors[`${props.name}Error`];
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.value });
+    setState({
+      ...state,
+      formData: { ...state.formData, [event.target.name]: event.target.value },
+    });
   };
 
   return (

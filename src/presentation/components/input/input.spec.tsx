@@ -11,11 +11,15 @@ const makeSut = (fieldName: string): RenderResult =>
       value={{
         state: {
           isLoading: false,
-          email: '',
-          emailError: '',
-          password: '',
-          passwordError: '',
           mainError: '',
+          formDate: {
+            email: '',
+            password: '',
+          },
+          formErrors: {
+            emailError: '',
+            passwordError: '',
+          },
         },
         setState: () => {},
       }}
