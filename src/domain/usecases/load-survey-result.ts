@@ -5,13 +5,13 @@ export interface LoadSurveyResult {
 export namespace LoadSurveyResult {
   export type Model = {
     question: string;
+    date: Date;
     answers: {
       image?: string;
       answer: string;
       count: number;
       percent: number;
+      isCurrentAccountAnswer: boolean;
     }[];
-    date: Date;
-    didAnswer: boolean;
   };
 }
