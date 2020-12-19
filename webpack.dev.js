@@ -31,10 +31,12 @@ module.exports = merge(common, {
       },
     ],
   },
+  devtool: 'inline-source-map',
   devServer: {
     contentBase: './public',
     writeToDisk: true,
     historyApiFallback: true,
+    open: true,
   },
   plugins: [
     new DefinePlugin({
