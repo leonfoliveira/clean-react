@@ -32,10 +32,6 @@ export namespace RemoteLoadSurveyList {
   export type Model = {
     id: string;
     question: string;
-    answers: {
-      answer: string;
-      image?: string;
-    }[];
     date: string;
     didAnswer: boolean;
   };
