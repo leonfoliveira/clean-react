@@ -3,7 +3,7 @@ import faker from 'faker';
 import { HttpGetClientSpy } from '@/data/test';
 import { HttpStatusCode } from '@/data/protocols/http';
 
-import { AccessDeniedError } from '@/domain/errors';
+import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 import { RemoteLoadSurveyResult } from './remote-load-survey-result';
 
 type SutTypes = {
@@ -39,5 +39,15 @@ describe('RemoteSurveyResult', () => {
 
     const promise = sut.load();
     await expect(promise).rejects.toThrow(new AccessDeniedError());
+  });
+
+  test('Should throw UnexpectedError if HttpGetClient returns 404', async () => {
+    const { sut, httpGetClientSpy } = makeSut();
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.notFound,
+    };
+
+    const promise = sut.load();
+    await expect(promise).rejects.toThrow(new UnexpectedError());
   });
 });
