@@ -19,13 +19,11 @@ const SurveyResult: React.FC = () => (
           <span className={Styles.answer}>ReactJS</span>
           <span className={Styles.percent}>50%</span>
         </li>
-
         <li className={Styles.active}>
           <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
           <span className={Styles.answer}>ReactJS</span>
           <span className={Styles.percent}>50%</span>
         </li>
-
         <li>
           <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
           <span className={Styles.answer}>ReactJS</span>
