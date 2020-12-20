@@ -1,6 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory, MemoryHistory } from 'history';
+import { RecoilRoot } from 'recoil';
 
 import { ApiContext } from '@/presentation/contexts';
 import {
@@ -37,19 +38,21 @@ const makeSut = ({
   });
   const setCurrentAccountMock = jest.fn();
   render(
-    <ApiContext.Provider
-      value={{
-        setCurrentAccount: setCurrentAccountMock,
-        getCurrentAccount: mockAccountModel,
-      }}
-    >
-      <Router history={history}>
-        <SurveyResult
-          loadSurveyResult={loadSurveyResultSpy}
-          saveSurveyResult={saveSurveyResultSpy}
-        />
-      </Router>
-    </ApiContext.Provider>,
+    <RecoilRoot>
+      <ApiContext.Provider
+        value={{
+          setCurrentAccount: setCurrentAccountMock,
+          getCurrentAccount: mockAccountModel,
+        }}
+      >
+        <Router history={history}>
+          <SurveyResult
+            loadSurveyResult={loadSurveyResultSpy}
+            saveSurveyResult={saveSurveyResultSpy}
+          />
+        </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>,
   );
 
   return { loadSurveyResultSpy, saveSurveyResultSpy, history, setCurrentAccountMock };
@@ -237,12 +240,13 @@ describe('SurveyResult Component', () => {
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 
-  test('Should present multiple answer click', async () => {
+  test('Should prevent multiple answer click', async () => {
     const { saveSurveyResultSpy } = makeSut();
 
     await waitFor(() => screen.getByTestId('survey-result'));
     const answersWrap = screen.queryAllByTestId('answer-wrap');
     fireEvent.click(answersWrap[1]);
+    await waitFor(() => screen.getByTestId('survey-result'));
     fireEvent.click(answersWrap[1]);
     await waitFor(() => screen.getByTestId('survey-result'));
     expect(saveSurveyResultSpy.callsCount).toBe(1);

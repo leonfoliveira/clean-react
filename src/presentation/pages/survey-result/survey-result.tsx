@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Error, Footer, Header, Loading } from '@/presentation/components';
 import { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases';
 import { useErrorHandler } from '@/presentation/hooks';
 import {
   SurveyResultData,
-  SurveyResultContext,
+  surveyResultState,
+  onSurveyAnswerState,
 } from '@/presentation/pages/survey-result/components';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import Styles from './survey-result-styles.scss';
 
@@ -16,12 +18,8 @@ type Props = {
 };
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResult }) => {
-  const [state, setState] = useState({
-    isLoading: false,
-    error: '',
-    surveyResult: null as LoadSurveyResult.Model,
-    reload: false,
-  });
+  const [state, setState] = useRecoilState(surveyResultState);
+  const setOnAnswer = useSetRecoilState(onSurveyAnswerState);
 
   const handleError = useErrorHandler((error: Error) =>
     setState((old) => ({ ...old, surveyResult: null, error: error.message, isLoading: false })),
@@ -45,6 +43,8 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResult }) =
       .catch(handleError);
   };
 
+  useEffect(() => setOnAnswer({ onAnswer }), []);
+
   const reload = () => {
     setState((old) => ({ ...old, surveyResult: null, error: '', reload: !old.reload }));
   };
@@ -52,13 +52,11 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResult }) =
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
-      <SurveyResultContext.Provider value={{ onAnswer }}>
-        <div className={Styles.contentWrap} data-testid="survey-result">
-          {state.surveyResult && <SurveyResultData surveyResult={state.surveyResult} />}
-          {state.isLoading && <Loading />}
-          {state.error && <Error error={state.error} handleClick={reload} />}
-        </div>
-      </SurveyResultContext.Provider>
+      <div className={Styles.contentWrap} data-testid="survey-result">
+        {state.surveyResult && <SurveyResultData surveyResult={state.surveyResult} />}
+        {state.isLoading && <Loading />}
+        {state.error && <Error error={state.error} handleClick={reload} />}
+      </div>
       <Footer />
     </div>
   );
