@@ -1,8 +1,8 @@
 import * as Helpers from '../utils/helpers';
 import { Interceptor } from '../utils/interceptor';
 
-const path = /surveys\/(.+)\/results/;
-const mockLoadSuccess = () => Interceptor.mockOk('GET', path, { fixture: 'survey-result' });
+const path = /api\/surveys/;
+const mockLoadSuccess = () => Interceptor.mockOk('GET', path, { fixture: 'load-survey-result' });
 
 describe('SurveyResult', () => {
   describe('load', () => {
@@ -25,7 +25,7 @@ describe('SurveyResult', () => {
       let ok = false;
       cy.intercept('GET', path, (req) => {
         if (ok) {
-          req.reply({ statusCode: 200, fixture: 'survey-result' });
+          req.reply({ statusCode: 200, fixture: 'load-survey-result' });
         } else {
           req.reply({ statusCode: 500 });
         }
@@ -78,6 +78,8 @@ describe('SurveyResult', () => {
   describe('save', () => {
     const mockUnexpectedError = () => Interceptor.mockCustomErrors('PUT', path, [404, 500]);
     const mockAccessDeniedError = () => Interceptor.mockForbidden('PUT', path);
+    const mockSaveSuccess = () =>
+      Interceptor.mockOk('PUT', path, { fixture: 'save-survey-result' });
 
     beforeEach(() => {
       cy.fixture('account').then((account) => {
@@ -97,6 +99,26 @@ describe('SurveyResult', () => {
       mockAccessDeniedError();
       cy.get('li:nth-child(2)').click();
       Helpers.testUrl('/login');
+    });
+
+    it('Should present survey result', () => {
+      mockSaveSuccess();
+      cy.get('li:nth-child(2)').click();
+      cy.getByTestId('question').should('have.text', 'Other Question');
+      cy.getByTestId('day').should('have.text', '23');
+      cy.getByTestId('month').should('have.text', 'mar');
+      cy.getByTestId('year').should('have.text', '2020');
+      cy.get('li:nth-child(1)').then((li) => {
+        assert.isNotEmpty(li.attr('class'));
+        assert.equal(li.find('[data-testid="answer"]').text(), 'other_answer');
+        assert.equal(li.find('[data-testid="image"]').attr('src'), 'other_image');
+        assert.equal(li.find('[data-testid="percent"]').text(), '50%');
+      });
+      cy.get('li:nth-child(2)').then((li) => {
+        assert.equal(li.find('[data-testid="answer"]').text(), 'other_answer_2');
+        assert.notExists(li.find('[data-testid="image"]'));
+        assert.equal(li.find('[data-testid="percent"]').text(), '50%');
+      });
     });
   });
 });
