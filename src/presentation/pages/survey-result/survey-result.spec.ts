@@ -5,8 +5,10 @@ import { LoadSurveyResultSpy, SaveSurveyResultSpy, mockSurveyResultModel } from 
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 import { AccountModel } from '@/domain/models';
 import { renderWithHistory } from '@/presentation/test';
+import { LoadSurveyResult } from '@/domain/usecases';
 
 import SurveyResult from './survey-result';
+import { surveyResultState } from './components';
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy;
@@ -18,11 +20,18 @@ type SutTypes = {
 type SutParams = {
   loadSurveyResultSpy?: LoadSurveyResultSpy;
   saveSurveyResultSpy?: SaveSurveyResultSpy;
+  initialState?: {
+    isLoading: boolean;
+    error: string;
+    surveyResult: LoadSurveyResult.Model;
+    reload: boolean;
+  };
 };
 
 const makeSut = ({
   loadSurveyResultSpy = new LoadSurveyResultSpy(),
   saveSurveyResultSpy = new SaveSurveyResultSpy(),
+  initialState = null,
 }: SutParams = {}): SutTypes => {
   const history = createMemoryHistory({
     initialEntries: ['/', '/surveys/any_id'],
@@ -36,6 +45,7 @@ const makeSut = ({
         loadSurveyResult: loadSurveyResultSpy,
         saveSurveyResult: saveSurveyResultSpy,
       }),
+    states: initialState ? [{ atom: surveyResultState, value: initialState }] : [],
   });
 
   return { loadSurveyResultSpy, saveSurveyResultSpy, history, setCurrentAccountMock };
@@ -224,14 +234,19 @@ describe('SurveyResult Component', () => {
   });
 
   test('Should prevent multiple answer click', async () => {
-    const { saveSurveyResultSpy } = makeSut();
+    const initialState = {
+      isLoading: true,
+      error: '',
+      surveyResult: null as LoadSurveyResult.Model,
+      reload: false,
+    };
+    const { saveSurveyResultSpy } = makeSut({ initialState });
 
     await waitFor(() => screen.getByTestId('survey-result'));
     const answersWrap = screen.queryAllByTestId('answer-wrap');
     fireEvent.click(answersWrap[1]);
     await waitFor(() => screen.getByTestId('survey-result'));
-    fireEvent.click(answersWrap[1]);
-    await waitFor(() => screen.getByTestId('survey-result'));
-    expect(saveSurveyResultSpy.callsCount).toBe(1);
+
+    expect(saveSurveyResultSpy.callsCount).toBe(0);
   });
 });
