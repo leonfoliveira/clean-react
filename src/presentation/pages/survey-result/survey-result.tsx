@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import FlipMove from 'react-flip-move';
 
 import { Calendar, Error, Footer, Header, Loading } from '@/presentation/components';
@@ -39,6 +40,8 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
     setState((old) => ({ isLoading: true, surveyResult: null, error: '', reload: !old.reload }));
   };
 
+  const { back } = useHistory();
+
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
@@ -68,7 +71,9 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
                 </li>
               ))}
             </FlipMove>
-            <button type="button">Voltar</button>
+            <button type="button" onClick={back} data-testid="back-button">
+              Voltar
+            </button>
           </>
         )}
         {state.isLoading && <Loading />}
