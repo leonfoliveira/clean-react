@@ -13,7 +13,7 @@ type Props = {
 };
 
 const Result: React.FC<Props> = ({ surveyResult }) => {
-  const { back } = useHistory();
+  const { go } = useHistory();
 
   return (
     <>
@@ -28,7 +28,12 @@ const Result: React.FC<Props> = ({ surveyResult }) => {
           ))}
         </>
       </FlipMove>
-      <button className={Styles.button} type="button" onClick={back} data-testid="back-button">
+      <button
+        className={Styles.button}
+        type="button"
+        onClick={() => go(-1)}
+        data-testid="back-button"
+      >
         Voltar
       </button>
     </>

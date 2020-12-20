@@ -60,4 +60,15 @@ describe('SurveyResult', () => {
       assert.equal(li.find('[data-testid="percent"]').text(), '30%');
     });
   });
+
+  it('Should back on back button click', () => {
+    cy.intercept('GET', /surveys$/, (req) => {
+      req.destroy();
+    });
+    mockSuccess();
+    cy.visit('/');
+    cy.visit('/surveys/any_id');
+    cy.getByTestId('back-button').click();
+    Helpers.testUrl('/');
+  });
 });
