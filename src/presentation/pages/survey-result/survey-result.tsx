@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import FlipMove from 'react-flip-move';
 
-import { Calendar, Error, Footer, Header, Loading } from '@/presentation/components';
+import { Error, Footer, Header, Loading } from '@/presentation/components';
 import { LoadSurveyResult } from '@/domain/usecases';
 import { useErrorHandler } from '@/presentation/hooks';
+import { SurveyResultData } from './components';
 
 import Styles from './survey-result-styles.scss';
 
@@ -40,42 +39,11 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
     setState((old) => ({ isLoading: true, surveyResult: null, error: '', reload: !old.reload }));
   };
 
-  const { back } = useHistory();
-
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
       <div className={Styles.contentWrap} data-testid="survey-result">
-        {state.surveyResult && (
-          <>
-            <hgroup>
-              <Calendar date={state.surveyResult.date} className={Styles.calendarWrap} />
-              <h2 data-testid="question">{state.surveyResult.question}</h2>
-            </hgroup>
-            <FlipMove className={Styles.answersList} data-testid="answers">
-              {state.surveyResult.answers.map((answer) => (
-                <li
-                  key={answer.answer}
-                  className={answer.isCurrentAccountAnswer ? Styles.active : ''}
-                  data-testid="answer-wrap"
-                >
-                  {answer.image && (
-                    <img src={answer.image} alt={answer.answer} data-testid="image" />
-                  )}
-                  <span className={Styles.answer} data-testid="answer">
-                    {answer.answer}
-                  </span>
-                  <span className={Styles.percent} data-testid="percent">
-                    {`${answer.percent}%`}
-                  </span>
-                </li>
-              ))}
-            </FlipMove>
-            <button type="button" onClick={back} data-testid="back-button">
-              Voltar
-            </button>
-          </>
-        )}
+        {state.surveyResult && <SurveyResultData surveyResult={state.surveyResult} />}
         {state.isLoading && <Loading />}
         {state.error && <Error error={state.error} handleClick={reload} />}
       </div>
