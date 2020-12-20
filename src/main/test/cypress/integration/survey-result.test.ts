@@ -77,7 +77,7 @@ describe('SurveyResult', () => {
 
   describe('save', () => {
     const mockUnexpectedError = () => Interceptor.mockCustomErrors('PUT', path, [404, 500]);
-    // const mockAccessDeniedError = () => Interceptor.mockForbidden('GET', path);
+    const mockAccessDeniedError = () => Interceptor.mockForbidden('PUT', path);
 
     beforeEach(() => {
       cy.fixture('account').then((account) => {
@@ -91,6 +91,12 @@ describe('SurveyResult', () => {
       mockUnexpectedError();
       cy.get('li:nth-child(2)').click();
       cy.getByTestId('error').should('contain.text', 'Something wrong happened. Try again.');
+    });
+
+    it('Should logout on AccessDeniedError', () => {
+      mockAccessDeniedError();
+      cy.get('li:nth-child(2)').click();
+      Helpers.testUrl('/login');
     });
   });
 });
