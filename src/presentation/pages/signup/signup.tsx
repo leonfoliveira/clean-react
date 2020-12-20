@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { Validation } from '@/presentation/protocols/validation';
 import { LoginHeader, Footer, currentAccountState } from '@/presentation/components';
@@ -15,9 +15,12 @@ type Props = {
 };
 
 const Signup: React.FC<Props> = ({ validation, registration }) => {
+  const resetSignupState = useResetRecoilState(signupState);
   const history = useHistory();
   const { setCurrentAccount } = useRecoilValue(currentAccountState);
   const [state, setState] = useRecoilState(signupState);
+
+  useEffect(() => resetSignupState, []);
 
   const validate = (field: string): void => {
     const fieldError = validation.validate(field, state.formData);
