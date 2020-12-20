@@ -3,7 +3,7 @@ import { Interceptor } from '../utils/interceptor';
 
 const path = /surveys\/(.+)\/results/;
 const mockUnexpectedError = () => Interceptor.mockCustomErrors('GET', path, [404, 500]);
-// const mockAccessDeniedError = () => Interceptor.mockForbidden('GET', path);
+const mockAccessDeniedError = () => Interceptor.mockForbidden('GET', path);
 // const mockSuccess = () => Interceptor.mockOk('GET', path, { fixture: 'survey-list' });
 
 describe('SurveyResult', () => {
@@ -33,5 +33,11 @@ describe('SurveyResult', () => {
     cy.getByTestId('error').should('contain.text', 'Something wrong happened. Try again.');
     cy.getByTestId('reload').click();
     cy.getByTestId('question').should('exist');
+  });
+
+  it('Should logout on AccessDeniedError', () => {
+    mockAccessDeniedError();
+    cy.visit('/surveys/any_id');
+    Helpers.testUrl('/login');
   });
 });
