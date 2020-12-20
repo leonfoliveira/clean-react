@@ -68,17 +68,17 @@ describe('RemoteLoadSurveyResult', () => {
 
   test('Should return a LoadSurveyResult.Model if HttpGetClient returns 200', async () => {
     const { sut, httpClientSpy } = makeSut(faker.internet.url());
-    const httpResponse = mockRemoteSurveyResultModel();
+    const httpResult = mockRemoteSurveyResultModel();
     httpClientSpy.response = {
       statusCode: HttpStatusCode.ok,
-      body: httpResponse,
+      body: httpResult,
     };
 
-    const account = await sut.load();
+    const httpResponse = await sut.load();
 
-    expect(account).toEqual({
-      ...httpResponse,
-      date: new Date(httpResponse.date),
+    expect(httpResponse).toEqual({
+      ...httpResult,
+      date: new Date(httpResult.date),
     });
   });
 });
