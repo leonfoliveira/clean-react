@@ -7,8 +7,8 @@ export type HttpRequest = {
   headers?: any;
 };
 
-export interface HttpClient<R = any> {
-  request: (data: HttpRequest) => Promise<HttpResponse<R>>;
+export interface HttpClient<T = any> {
+  request: (data: HttpRequest) => Promise<HttpResponse<T>>;
 }
 
 export enum HttpStatusCode {
