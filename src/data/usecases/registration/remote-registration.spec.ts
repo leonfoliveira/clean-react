@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-import { HttpPostClientSpy } from '@/data/test';
+import { HttpClientSpy } from '@/data/test';
 import { Registration } from '@/domain/usecases/registration';
 import { mockRegistrationModel, mockRegistrationParams } from '@/domain/test';
 import { HttpStatusCode } from '@/data/protocols/http';
@@ -10,39 +10,40 @@ import { RemoteRegistration } from './remote-registration';
 
 type SutTypes = {
   sut: RemoteRegistration;
-  httpPostClientSpy: HttpPostClientSpy<Registration.Model, Registration.Params>;
+  httpClientSpy: HttpClientSpy<Registration.Model>;
 };
 
 const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpPostClientSpy = new HttpPostClientSpy<Registration.Model, Registration.Params>();
-  const sut = new RemoteRegistration(url, httpPostClientSpy);
+  const httpClientSpy = new HttpClientSpy<Registration.Model>();
+  const sut = new RemoteRegistration(url, httpClientSpy);
 
-  return { sut, httpPostClientSpy };
+  return { sut, httpClientSpy };
 };
 
 describe('Registration', () => {
-  test('Should call HttpPostClient with correct URL', () => {
+  test('Should call HttpPostClient with correct URL and Method', () => {
     const url = faker.internet.url();
-    const { sut, httpPostClientSpy } = makeSut(url);
+    const { sut, httpClientSpy } = makeSut(url);
 
     sut.register(mockRegistrationParams());
 
-    expect(httpPostClientSpy.url).toBe(url);
+    expect(httpClientSpy.url).toBe(url);
+    expect(httpClientSpy.method).toBe('POST');
   });
 
   test('Should call HttpPostClient with correct body', () => {
-    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
+    const { sut, httpClientSpy } = makeSut(faker.internet.url());
     const body = mockRegistrationParams();
 
     sut.register(body);
 
-    expect(httpPostClientSpy.body).toEqual(body);
+    expect(httpClientSpy.body).toEqual(body);
   });
 
   test('Should return an Registration.Model if HttpPostClient returns 200', async () => {
-    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
+    const { sut, httpClientSpy } = makeSut(faker.internet.url());
     const httpResponse = mockRegistrationModel();
-    httpPostClientSpy.response = {
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: httpResponse,
     };
@@ -53,8 +54,8 @@ describe('Registration', () => {
   });
 
   test('Should throw UnexpectedError if HttpPostClient returns 400', async () => {
-    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
-    httpPostClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut(faker.internet.url());
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.badRequest,
     };
 
@@ -64,8 +65,8 @@ describe('Registration', () => {
   });
 
   test('Should throw InvalidCredentials if HttpPostClient returns 403', async () => {
-    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
-    httpPostClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut(faker.internet.url());
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.forbidden,
     };
 
@@ -75,8 +76,8 @@ describe('Registration', () => {
   });
 
   test('Should throw UnexpectedError if HttpPostClient returns 404', async () => {
-    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
-    httpPostClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut(faker.internet.url());
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.notFound,
     };
 
@@ -86,8 +87,8 @@ describe('Registration', () => {
   });
 
   test('Should throw UnexpectedError if HttpPostClient returns 500', async () => {
-    const { sut, httpPostClientSpy } = makeSut(faker.internet.url());
-    httpPostClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut(faker.internet.url());
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.serverError,
     };
 

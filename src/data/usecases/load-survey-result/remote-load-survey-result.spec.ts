@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-import { HttpGetClientSpy, mockRemoteSurveyResultModel } from '@/data/test';
+import { HttpClientSpy, mockRemoteSurveyResultModel } from '@/data/test';
 import { HttpStatusCode } from '@/data/protocols/http';
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 
@@ -8,36 +8,37 @@ import { RemoteLoadSurveyResult } from './remote-load-survey-result';
 
 type SutTypes = {
   sut: RemoteLoadSurveyResult;
-  httpGetClientSpy: HttpGetClientSpy<RemoteLoadSurveyResult.Model>;
+  httpClientSpy: HttpClientSpy<RemoteLoadSurveyResult.Model>;
 };
 
 const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy<RemoteLoadSurveyResult.Model>();
-  const sut = new RemoteLoadSurveyResult(url, httpGetClientSpy);
+  const httpClientSpy = new HttpClientSpy<RemoteLoadSurveyResult.Model>();
+  const sut = new RemoteLoadSurveyResult(url, httpClientSpy);
 
   return {
     sut,
-    httpGetClientSpy,
+    httpClientSpy,
   };
 };
 
 describe('RemoteSurveyResult', () => {
-  test('Should call HttpGetClient with correct URL', async () => {
+  test('Should call HttpGetClient with correct URL and Method', async () => {
     const url = faker.internet.url();
-    const { sut, httpGetClientSpy } = makeSut(url);
-    httpGetClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut(url);
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: mockRemoteSurveyResultModel(),
     };
 
     await sut.load();
 
-    expect(httpGetClientSpy.url).toBe(url);
+    expect(httpClientSpy.url).toBe(url);
+    expect(httpClientSpy.method).toBe('GET');
   });
 
   test('Should throw AccessDeniedError if HttpGetClient returns 403', async () => {
-    const { sut, httpGetClientSpy } = makeSut();
-    httpGetClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut();
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.forbidden,
     };
 
@@ -46,8 +47,8 @@ describe('RemoteSurveyResult', () => {
   });
 
   test('Should throw UnexpectedError if HttpGetClient returns 404', async () => {
-    const { sut, httpGetClientSpy } = makeSut();
-    httpGetClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut();
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.notFound,
     };
 
@@ -56,8 +57,8 @@ describe('RemoteSurveyResult', () => {
   });
 
   test('Should throw UnexpectedError if HttpGetClient returns 500', async () => {
-    const { sut, httpGetClientSpy } = makeSut();
-    httpGetClientSpy.response = {
+    const { sut, httpClientSpy } = makeSut();
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.serverError,
     };
 
@@ -66,9 +67,9 @@ describe('RemoteSurveyResult', () => {
   });
 
   test('Should return a LoadSurveyResult.Model if HttpGetClient returns 200', async () => {
-    const { sut, httpGetClientSpy } = makeSut(faker.internet.url());
+    const { sut, httpClientSpy } = makeSut(faker.internet.url());
     const httpResponse = mockRemoteSurveyResultModel();
-    httpGetClientSpy.response = {
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: httpResponse,
     };
