@@ -4,7 +4,7 @@
   "main": "src/main/index.tsx",
   "repository": "https://github.com/leonfoliveira/clean-react.git",
   "author": "Leonardo Oliveira <leonfoliveira@gmail.com>",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "dev": "webpack serve --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
