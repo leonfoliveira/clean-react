@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Error, Footer, Header, Loading } from '@/presentation/components';
 import { LoadSurveyResult } from '@/domain/usecases';
 import { useErrorHandler } from '@/presentation/hooks';
-import { SurveyResultData } from './components';
+import { SurveyResultData } from '@/presentation/pages/survey-result/components';
 
 import Styles from './survey-result-styles.scss';
 
