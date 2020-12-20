@@ -4,6 +4,7 @@ import { RemoteLoadSurveyResult } from '../usecases';
 
 export const mockRemoteSurveyResultModel = (): RemoteLoadSurveyResult.Model => ({
   question: faker.random.words(),
+  date: faker.date.recent().toISOString(),
   answers: [
     {
       image: faker.random.words(),
@@ -19,5 +20,4 @@ export const mockRemoteSurveyResultModel = (): RemoteLoadSurveyResult.Model => (
       isCurrentAccountAnswer: faker.random.boolean(),
     },
   ],
-  date: faker.date.recent().toISOString(),
 });

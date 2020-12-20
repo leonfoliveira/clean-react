@@ -15,16 +15,16 @@ export const mockHttpRequest = (): HttpRequest => ({
   headers: faker.random.objectElement<{}>(),
 });
 
-export class HttpClientSpy<R = any> implements HttpClient<R> {
+export class HttpClientSpy<T = any> implements HttpClient<T> {
   url?: string;
   method?: HttpMethod;
   body?: any;
   headers?: any;
-  response: HttpResponse<R> = {
+  response: HttpResponse<T> = {
     statusCode: HttpStatusCode.ok,
   };
 
-  async request(data: HttpRequest): Promise<HttpResponse<R>> {
+  async request(data: HttpRequest): Promise<HttpResponse<T>> {
     this.url = data.url;
     this.method = data.method;
     this.body = data.body;

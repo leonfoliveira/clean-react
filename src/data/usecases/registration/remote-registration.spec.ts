@@ -21,23 +21,16 @@ const makeSut = (url = faker.internet.url()): SutTypes => {
 };
 
 describe('Registration', () => {
-  test('Should call HttpPostClient with correct URL and Method', () => {
+  test('Should call HttpPostClient with correct values', () => {
     const url = faker.internet.url();
     const { sut, httpClientSpy } = makeSut(url);
+    const registerParams = mockRegistrationParams();
 
-    sut.register(mockRegistrationParams());
+    sut.register(registerParams);
 
     expect(httpClientSpy.url).toBe(url);
     expect(httpClientSpy.method).toBe('POST');
-  });
-
-  test('Should call HttpPostClient with correct body', () => {
-    const { sut, httpClientSpy } = makeSut(faker.internet.url());
-    const body = mockRegistrationParams();
-
-    sut.register(body);
-
-    expect(httpClientSpy.body).toEqual(body);
+    expect(httpClientSpy.body).toEqual(registerParams);
   });
 
   test('Should return an Registration.Model if HttpPostClient returns 200', async () => {
