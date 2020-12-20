@@ -3,23 +3,12 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import { LoadSurveyList } from '@/domain/usecases';
-import { mockAccountModel, mockSurveyListModel } from '@/domain/test';
+import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test';
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 import { ApiContext } from '@/presentation/contexts';
 import { AccountModel } from '@/domain/models';
 
 import SurveyList from './survey-list';
-
-class LoadSurveyListSpy implements LoadSurveyList {
-  callsCount = 0;
-  surveys = mockSurveyListModel();
-
-  async loadAll(): Promise<LoadSurveyList.Model[]> {
-    this.callsCount += 1;
-    return this.surveys;
-  }
-}
 
 type SutTypes = {
   history: MemoryHistory;
