@@ -37,7 +37,7 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }) => {
   return (
     <div className={Styles.surveyListWrap}>
       <Header />
-      <div className={Styles.contentWrap} onClick={() => {}}>
+      <div className={Styles.contentWrap}>
         <h2>Enquetes</h2>
         <SurveyContext.Provider value={{ state, setState }}>
           {state.error ? <Error error={state.error} handleClick={reload} /> : <SurveyListitem />}

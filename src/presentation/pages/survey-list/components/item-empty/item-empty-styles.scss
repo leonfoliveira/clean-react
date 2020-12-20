@@ -1,4 +1,5 @@
 @import '~@/presentation/styles/colors.scss';
+@import '~@/presentation/styles/animations.scss';
 
 .surveyItemEmpty {
   position: relative;
@@ -43,11 +44,5 @@
         }
       }
     }
-  }
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
   }
 }
