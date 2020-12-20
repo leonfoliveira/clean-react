@@ -24,10 +24,10 @@ export const mockSurveyResultModel = (): LoadSurveyResult.Model => ({
 
 export class LoadSurveyResultSpy implements LoadSurveyResult {
   callsCount = 0;
-  surveys = mockSurveyResultModel();
+  surveyResult = mockSurveyResultModel();
 
   async load(): Promise<LoadSurveyResult.Model> {
     this.callsCount += 1;
-    return this.surveys;
+    return this.surveyResult;
   }
 }
