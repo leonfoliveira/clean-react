@@ -1,14 +1,13 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
-import { ApiContext } from '@/presentation/contexts';
+import { currentAccountState } from '@/presentation/components';
 
 type ResultType = () => void;
 
 export const useLogout = (): ResultType => {
   const history = useHistory();
-  const { setCurrentAccount } = useContext(ApiContext);
+  const { setCurrentAccount } = useRecoilValue(currentAccountState);
 
   return (): void => {
     setCurrentAccount(null);

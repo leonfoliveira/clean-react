@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { memo, useContext } from 'react';
+import React, { memo } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { ApiContext } from '@/presentation/contexts';
-import { Logo } from '@/presentation/components';
+import { Logo, currentAccountState } from '@/presentation/components';
 import { useLogout } from '@/presentation/hooks';
 
 import Styles from './header-styles.scss';
 
 const Header: React.FC = () => {
-  const { getCurrentAccount } = useContext(ApiContext);
+  const { getCurrentAccount } = useRecoilValue(currentAccountState);
 
   const logout = useLogout();
 

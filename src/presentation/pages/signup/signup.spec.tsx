@@ -7,9 +7,9 @@ import { RecoilRoot } from 'recoil';
 
 import { Helper, ValidationStub } from '@/presentation/test';
 import { EmailInUseError } from '@/domain/errors';
-import { ApiContext } from '@/presentation/contexts';
 import { Registration } from '@/domain/usecases';
 import { RegistrationSpy } from '@/domain/test';
+import { currentAccountState } from '@/presentation/components';
 
 import Signup from './signup';
 
@@ -29,14 +29,17 @@ const makeSut = (params?: SutParams): SutTypes => {
   const registrationSpy = new RegistrationSpy();
   const setCurrentAccountMock = jest.fn();
   render(
-    <RecoilRoot>
-      <ApiContext.Provider
-        value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => null }}
-      >
-        <Router history={history}>
-          <Signup validation={validationStub} registration={registrationSpy} />
-        </Router>
-      </ApiContext.Provider>
+    <RecoilRoot
+      initializeState={({ set }) => {
+        set(currentAccountState, {
+          setCurrentAccount: setCurrentAccountMock,
+          getCurrentAccount: () => null,
+        });
+      }}
+    >
+      <Router history={history}>
+        <Signup validation={validationStub} registration={registrationSpy} />
+      </Router>
     </RecoilRoot>,
   );
 

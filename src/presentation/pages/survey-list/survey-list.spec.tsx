@@ -6,8 +6,8 @@ import { RecoilRoot } from 'recoil';
 
 import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test';
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
-import { ApiContext } from '@/presentation/contexts';
 import { AccountModel } from '@/domain/models';
+import { currentAccountState } from '@/presentation/components';
 
 import SurveyList from './survey-list';
 
@@ -21,17 +21,17 @@ const makeSut = (loadSurveyListSpy = new LoadSurveyListSpy()): SutTypes => {
   const history = createMemoryHistory();
   const setCurrentAccountMock = jest.fn();
   render(
-    <RecoilRoot>
-      <ApiContext.Provider
-        value={{
+    <RecoilRoot
+      initializeState={({ set }) => {
+        set(currentAccountState, {
           setCurrentAccount: setCurrentAccountMock,
           getCurrentAccount: () => mockAccountModel(),
-        }}
-      >
-        <Router history={history}>
-          <SurveyList loadSurveyList={loadSurveyListSpy} />
-        </Router>
-      </ApiContext.Provider>
+        });
+      }}
+    >
+      <Router history={history}>
+        <SurveyList loadSurveyList={loadSurveyListSpy} />
+      </Router>
     </RecoilRoot>,
   );
 
