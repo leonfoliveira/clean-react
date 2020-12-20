@@ -18,7 +18,10 @@ export class RemoteSaveSurveyResult implements SaveSurveyResult {
 
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok:
-        return null;
+        return {
+          ...httpResponse.body,
+          date: new Date(httpResponse.body.date),
+        };
       case HttpStatusCode.forbidden:
         throw new AccessDeniedError();
       default:
