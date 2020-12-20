@@ -22,7 +22,7 @@ const SurveyItem: React.FC<Props> = ({ survey }) => (
     </div>
     <footer>
       <Link to={`/surveys/${survey.id}`} data-testid="link">
-        <button type="button">Ver Resultado</button>
+        Ver Resultado
       </Link>
     </footer>
   </li>

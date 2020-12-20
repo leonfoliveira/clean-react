@@ -44,21 +44,24 @@
   }
 
   footer {
-    button {
-      width: 100%;
-      border-radius: 0 0 8px 8px;
-      background-color: $primary;
+    width: 100%;
+    border-radius: 0 0 8px 8px;
+    background-color: $primary;
+    cursor: pointer;
+    outline: 0;
+
+    &:hover {
+      background-color: $primaryDark;
+      opacity: 1;
+    }
+
+    a {
+      display: block;
       line-height: 40px;
+      color: $white;
       text-transform: lowercase;
       text-align: center;
-      color: $white;
-      cursor: pointer;
-      outline: 0;
-
-      &:hover {
-        background-color: $primaryDark;
-        opacity: 1;
-      }
+      text-decoration: none;
     }
   }
 }
