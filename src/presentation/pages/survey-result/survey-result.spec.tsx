@@ -1,29 +1,38 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { ApiContext } from '@/presentation/contexts';
 import { LoadSurveyResultSpy, mockAccountModel, mockSurveyResultModel } from '@/domain/test';
+import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
+import { AccountModel } from '@/domain/models';
 
-import { UnexpectedError } from '@/domain/errors';
+import { Router } from 'react-router-dom';
 import SurveyResult from './survey-result';
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy;
+  history: MemoryHistory;
+  setCurrentAccountMock: (account: AccountModel) => void;
 };
 
 const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
+  const history = createMemoryHistory();
+  const setCurrentAccountMock = jest.fn();
   render(
     <ApiContext.Provider
       value={{
-        setCurrentAccount: jest.fn(),
+        setCurrentAccount: setCurrentAccountMock,
         getCurrentAccount: mockAccountModel,
       }}
     >
-      <SurveyResult loadSurveyResult={loadSurveyResultSpy} />
+      <Router history={history}>
+        <SurveyResult loadSurveyResult={loadSurveyResultSpy} />
+      </Router>
     </ApiContext.Provider>,
   );
 
-  return { loadSurveyResultSpy };
+  return { loadSurveyResultSpy, history, setCurrentAccountMock };
 };
 
 describe('SurveyResult Component', () => {
@@ -89,5 +98,15 @@ describe('SurveyResult Component', () => {
     expect(screen.queryByTestId('question')).not.toBeInTheDocument();
     expect(screen.getByTestId('error')).toHaveTextContent(error.message);
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+  });
+
+  test('Should logout on accessDeniedError', async () => {
+    const loadSurveyListSpy = new LoadSurveyResultSpy();
+    jest.spyOn(loadSurveyListSpy, 'load').mockRejectedValueOnce(new AccessDeniedError());
+    const { history, setCurrentAccountMock } = makeSut(loadSurveyListSpy);
+
+    await waitFor(() => screen.getByTestId('survey-result'));
+    expect(setCurrentAccountMock).toBeCalledWith(null);
+    expect(history.location.pathname).toBe('/login');
   });
 });
