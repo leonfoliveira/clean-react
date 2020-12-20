@@ -3,6 +3,7 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import faker from 'faker';
 import { fireEvent, render, waitFor, screen } from '@testing-library/react';
+import { RecoilRoot } from 'recoil';
 
 import { Helper, ValidationStub } from '@/presentation/test';
 import { EmailInUseError } from '@/domain/errors';
@@ -28,13 +29,15 @@ const makeSut = (params?: SutParams): SutTypes => {
   const registrationSpy = new RegistrationSpy();
   const setCurrentAccountMock = jest.fn();
   render(
-    <ApiContext.Provider
-      value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => null }}
-    >
-      <Router history={history}>
-        <Signup validation={validationStub} registration={registrationSpy} />
-      </Router>
-    </ApiContext.Provider>,
+    <RecoilRoot>
+      <ApiContext.Provider
+        value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => null }}
+      >
+        <Router history={history}>
+          <Signup validation={validationStub} registration={registrationSpy} />
+        </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>,
   );
 
   return { registrationSpy, setCurrentAccountMock };

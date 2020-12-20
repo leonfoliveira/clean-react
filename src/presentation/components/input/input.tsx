@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
-
-import { FormContext } from '@/presentation/contexts';
+import React from 'react';
 
 import Styles from './input-styles.scss';
 
-type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+type Props = React.HTMLProps<HTMLInputElement> & {
+  state: any;
+  setState: any;
+};
 
-const Input: React.FC<Props> = (props) => {
-  const { state, setState } = useContext(FormContext);
+const Input: React.FC<Props> = ({ state, setState, ...props }) => {
   const error = state.formErrors[`${props.name}Error`];
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>) => {

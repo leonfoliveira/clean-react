@@ -2,8 +2,8 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import faker from 'faker';
-import 'jest-localstorage-mock';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { RecoilRoot } from 'recoil';
 
 import { ValidationStub, Helper } from '@/presentation/test';
 import { InvalidCredentialsError } from '@/domain/errors';
@@ -29,13 +29,15 @@ const makeSut = (params?: SutParams): SutTypes => {
   const authenticationSpy = new AuthenticationSpy();
   const setCurrentAccountMock = jest.fn();
   render(
-    <ApiContext.Provider
-      value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => null }}
-    >
-      <Router history={history}>
-        <Login validation={validationStub} authentication={authenticationSpy} />
-      </Router>
-    </ApiContext.Provider>,
+    <RecoilRoot>
+      <ApiContext.Provider
+        value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => null }}
+      >
+        <Router history={history}>
+          <Login validation={validationStub} authentication={authenticationSpy} />
+        </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>,
   );
 
   return { authenticationSpy, setCurrentAccountMock };

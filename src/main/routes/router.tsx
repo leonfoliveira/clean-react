@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 
 import {
   setCurrentAccountAdapter,
@@ -10,21 +11,23 @@ import { ApiContext } from '@/presentation/contexts';
 import { PrivateRoute } from '@/presentation/components';
 
 const Router: React.FC = () => (
-  <ApiContext.Provider
-    value={{
-      setCurrentAccount: setCurrentAccountAdapter,
-      getCurrentAccount: getCurrentAccountAdapter,
-    }}
-  >
-    <BrowserRouter>
-      <Switch>
-        <Route path="/login" exact component={makeLogin} />
-        <Route path="/signup" exact component={makeSignup} />
-        <PrivateRoute path="/" exact component={makeSurveyList} />
-        <PrivateRoute path="/surveys/:id" exact component={makeSurveyResult} />
-      </Switch>
-    </BrowserRouter>
-  </ApiContext.Provider>
+  <RecoilRoot>
+    <ApiContext.Provider
+      value={{
+        setCurrentAccount: setCurrentAccountAdapter,
+        getCurrentAccount: getCurrentAccountAdapter,
+      }}
+    >
+      <BrowserRouter>
+        <Switch>
+          <Route path="/login" exact component={makeLogin} />
+          <Route path="/signup" exact component={makeSignup} />
+          <PrivateRoute path="/" exact component={makeSurveyList} />
+          <PrivateRoute path="/surveys/:id" exact component={makeSurveyResult} />
+        </Switch>
+      </BrowserRouter>
+    </ApiContext.Provider>
+  </RecoilRoot>
 );
 
 export default Router;
