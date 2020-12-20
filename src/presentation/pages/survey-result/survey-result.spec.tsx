@@ -56,5 +56,27 @@ describe('SurveyResult Component', () => {
     expect(screen.getByTestId('month')).toHaveTextContent('jan');
     expect(screen.getByTestId('year')).toHaveTextContent('2020');
     expect(screen.getByTestId('question')).toHaveTextContent(surveyResult.question);
+    expect(screen.getByTestId('answers').childElementCount).toBe(2);
+    const answersWrap = screen.queryAllByTestId('answer-wrap');
+    const images = screen.queryAllByTestId('image');
+    const answers = screen.queryAllByTestId('answer');
+    const percents = screen.queryAllByTestId('percent');
+    surveyResult.answers.forEach((answer, index) => {
+      if (answer.isCurrentAccountAnswer) {
+        expect(answersWrap[index]).toHaveClass('active');
+      } else {
+        expect(answersWrap[index]).not.toHaveClass('active');
+      }
+      if (answer.image) {
+        expect(images[index]).toHaveAttribute('src', answer.image);
+        expect(images[index]).toHaveAttribute('alt', answer.answer);
+      } else {
+        expect(images[index]).toBeFalsy();
+      }
+      expect(answers[index]).toHaveTextContent(answer.answer);
+      expect(percents[index]).toHaveTextContent(`${answer.percent}%`);
+    });
   });
+
+  
 });
