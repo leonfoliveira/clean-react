@@ -29,6 +29,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
       .then((surveyResult) =>
         setState((old) => ({
           ...old,
+          isLoading: false,
           surveyResult,
         })),
       )
