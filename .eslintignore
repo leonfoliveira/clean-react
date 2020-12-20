@@ -1,10 +1,9 @@
 .vscode
 
-node_modules
-coverage
-cypress
-
-dist
+/node_modules
+/coverage
+/cypress
+/dist
 
 /*
 !/src
